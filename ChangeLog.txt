@@ -1,0 +1,23 @@
+Todo:
+Change starting page - Completed
+Bookmarks
+Settings Page
+Cache Info
+Download Manager
+Fix Tabs
+Display Favicon
+History Page - Completed
+
+v1.1.0.2
+Fixed Tab names updating.
+Fixed URL resizing issue.
+Redesign of the tab system.
+Redesign of the UI.
+Added History
+Updated to .NET 8.
+
+v1.0.0.1
+Fixed Tab length pushing the x off the tab.
+
+v1.0.0.0
+Released - WIP
