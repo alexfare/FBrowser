@@ -26,15 +26,19 @@ Partial Class HistoryForm
         ListBox1 = New ListBox()
         btnClearHistory = New Button()
         History = New Label()
+        Panel1 = New Panel()
+        Panel1.SuspendLayout()
         SuspendLayout()
         ' 
         ' ListBox1
         ' 
+        ListBox1.Dock = DockStyle.Fill
         ListBox1.FormattingEnabled = True
+        ListBox1.HorizontalScrollbar = True
         ListBox1.ItemHeight = 15
-        ListBox1.Location = New Point(12, 41)
+        ListBox1.Location = New Point(0, 0)
         ListBox1.Name = "ListBox1"
-        ListBox1.Size = New Size(401, 394)
+        ListBox1.Size = New Size(401, 475)
         ListBox1.TabIndex = 0
         ' 
         ' btnClearHistory
@@ -56,17 +60,26 @@ Partial Class HistoryForm
         History.TabIndex = 2
         History.Text = "History"
         ' 
+        ' Panel1
+        ' 
+        Panel1.Controls.Add(ListBox1)
+        Panel1.Location = New Point(12, 42)
+        Panel1.Name = "Panel1"
+        Panel1.Size = New Size(401, 475)
+        Panel1.TabIndex = 3
+        ' 
         ' HistoryForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(425, 450)
+        ClientSize = New Size(430, 529)
+        Controls.Add(Panel1)
         Controls.Add(History)
         Controls.Add(btnClearHistory)
-        Controls.Add(ListBox1)
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "HistoryForm"
         Text = "HistoryForm"
+        Panel1.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -74,4 +87,5 @@ Partial Class HistoryForm
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents btnClearHistory As Button
     Friend WithEvents History As Label
+    Friend WithEvents Panel1 As Panel
 End Class

@@ -8,6 +8,12 @@ Fix Tabs
 Display Favicon
 History Page - Completed
 
+v1.1.0.3
+Fixed URL link updating.
+Updates to the tab layout.
+Added About Page.
+Added View Downloads (WIP).
+
 v1.1.0.2
 Fixed Tab names updating.
 Fixed URL resizing issue.

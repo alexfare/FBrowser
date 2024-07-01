@@ -1,7 +1,7 @@
 ﻿Imports Microsoft.Web.WebView2.Core
+Imports Microsoft.Web.WebView2.WinForms
 
 Public Class Browser
-
     Private historyList As New List(Of HistoryItem)
 
     Private Async Sub Browser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -12,8 +12,8 @@ Public Class Browser
 
         ' Set the tab size and draw mode
         TabControl1.DrawMode = TabDrawMode.OwnerDrawFixed
-        TabControl1.ItemSize = New Size(79, 17) ' Adjust width and height as needed
-        TabControl1.SizeMode = TabSizeMode.Fixed
+        TabControl1.ItemSize = New Size(145, 25) ' Set a fixed size for tabs
+        AddHandler TabControl1.DrawItem, AddressOf TabControl1_DrawItem
 
         InitializeAsync()
     End Sub
@@ -88,9 +88,9 @@ Public Class Browser
 
         ' Create a panel for the navigation controls
         Dim navPanel As New Panel With {
-        .Dock = DockStyle.Top,
-        .Height = 30 ' Adjust height as needed
-    }
+            .Dock = DockStyle.Top,
+            .Height = 30 ' Adjust height as needed
+        }
 
         ' Create navigation controls
         Dim btnBack As New Button With {.Text = "Back", .Width = 60, .Left = 10}
@@ -117,9 +117,9 @@ Public Class Browser
 
         ' Create WebView2 control
         Dim newWebView As New Microsoft.Web.WebView2.WinForms.WebView2 With {
-        .Name = "WebView2",
-        .Dock = DockStyle.Fill
-    }
+            .Name = "WebView2",
+            .Dock = DockStyle.Fill
+        }
 
         ' Add the panel and WebView2 to the tab page
         newTab.Controls.Add(newWebView)
@@ -176,8 +176,22 @@ Public Class Browser
                                                                        End If
                                                                    End Sub
 
-        ' Add navigation completed event handler
-        AddHandler newWebView.NavigationCompleted, AddressOf OnNavigationCompleted
+        ' Add navigation starting and completed event handlers
+        AddHandler newWebView.NavigationStarting, Sub(sender, e)
+                                                      UpdateUrlTextBox(newTab, e.Uri)
+                                                  End Sub
+        AddHandler newWebView.NavigationCompleted, Sub(sender, e)
+                                                       UpdateUrlTextBox(newTab, newWebView.Source.ToString())
+                                                       OnNavigationCompleted(newWebView, e)
+                                                   End Sub
+        ' Add document title changed event handler
+        AddHandler newWebView.CoreWebView2InitializationCompleted, Async Sub(sender, args)
+                                                                       If args.IsSuccess Then
+                                                                           AddHandler newWebView.CoreWebView2.DocumentTitleChanged, Sub()
+                                                                                                                                        UpdateTabTitle(newTab, newWebView.CoreWebView2.DocumentTitle)
+                                                                                                                                    End Sub
+                                                                       End If
+                                                                   End Sub
 
         Try
             Await newWebView.EnsureCoreWebView2Async(Nothing)
@@ -192,12 +206,11 @@ Public Class Browser
                                     End Sub
     End Function
 
-
     Private Sub NavigateToUrl(webView As Microsoft.Web.WebView2.WinForms.WebView2, url As String)
         Try
             If Uri.IsWellFormedUriString(url, UriKind.Absolute) Then
                 webView.CoreWebView2.Navigate(url)
-                TextBox1.Text = url
+                UpdateUrlTextBox(TabControl1.SelectedTab, url)
             Else
                 URLSearch()
             End If
@@ -217,10 +230,19 @@ Public Class Browser
 
     Private Sub UpdateTabText(tab As TabPage, url As String)
         Dim domainName As String = GetDomainNameFromUrl(url)
-        If domainName.Length > 8 Then
-            domainName = domainName.Substring(0, 7) & "..."
+        If domainName.Length > 25 Then
+            domainName = domainName.Substring(0, 25)
         End If
-        tab.Text = domainName
+        tab.Text = domainName.PadRight(25)
+        TabControl1.Invalidate() ' Force redraw of the TabControl
+    End Sub
+
+    Private Sub UpdateTabTitle(tab As TabPage, title As String)
+        If title.Length > 25 Then
+            tab.Text = title.Substring(0, 25).PadRight(25)
+        Else
+            tab.Text = title.PadRight(25)
+        End If
         TabControl1.Invalidate() ' Force redraw of the TabControl
     End Sub
 
@@ -242,19 +264,23 @@ Public Class Browser
         Return host
     End Function
 
-    Private Sub TabControl1_DrawItem(sender As Object, e As DrawItemEventArgs) Handles TabControl1.DrawItem
+    Private Sub TabControl1_DrawItem(sender As Object, e As DrawItemEventArgs)
         Dim tabPage = TabControl1.TabPages(e.Index)
         Dim tabRect = TabControl1.GetTabRect(e.Index)
         Dim closeButtonSize = 10
         Dim closeButtonPadding = 7 ' Adjust the padding to ensure space between text and button
 
-        ' Calculate the position for the close button based on the text width
-        Dim textSize = TextRenderer.MeasureText(e.Graphics, tabPage.Text, tabPage.Font)
-        Dim closeButtonX = tabRect.Left + textSize.Width + closeButtonPadding
+        ' Calculate the position for the close button
+        Dim closeButtonX = tabRect.Right - closeButtonSize - closeButtonPadding
         Dim closeButtonRect = New Rectangle(closeButtonX, tabRect.Top + (tabRect.Height - closeButtonSize) / 2, closeButtonSize, closeButtonSize)
 
+        ' Center the text vertically but keep it to the left
+        Dim textHeight = TextRenderer.MeasureText(tabPage.Text, tabPage.Font).Height
+        Dim textY = tabRect.Top + (tabRect.Height - textHeight) / 2
+
         ' Draw the tab header text
-        TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, TextFormatFlags.Left)
+        Dim textRect = New Rectangle(tabRect.X + closeButtonPadding, textY, tabRect.Width - closeButtonSize - closeButtonPadding * 2, tabRect.Height)
+        TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, textRect, tabPage.ForeColor, TextFormatFlags.Left)
 
         ' Draw the close button
         e.Graphics.DrawRectangle(Pens.Black, closeButtonRect)
@@ -268,8 +294,7 @@ Public Class Browser
 
         For i As Integer = 0 To TabControl1.TabPages.Count - 1
             Dim tabRect = TabControl1.GetTabRect(i)
-            Dim textSize = TextRenderer.MeasureText(TabControl1.TabPages(i).Text, TabControl1.TabPages(i).Font)
-            Dim closeButtonX = tabRect.Left + textSize.Width + closeButtonPadding
+            Dim closeButtonX = tabRect.Right - closeButtonSize - closeButtonPadding
             Dim closeButtonRect = New Rectangle(closeButtonX, tabRect.Top + (tabRect.Height - closeButtonSize) / 2, closeButtonSize, closeButtonSize)
 
             If closeButtonRect.Contains(e.Location) Then
@@ -283,14 +308,11 @@ Public Class Browser
         Dim currentWebView = GetCurrentWebView()
         If currentWebView IsNot Nothing Then
             currentWebView.CoreWebView2.Navigate(url)
-            Dim currentTab = TabControl1.SelectedTab
-            Dim textBoxUrl = CType(currentTab.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
-            If textBoxUrl IsNot Nothing Then
-                textBoxUrl.Text = url
-            End If
+            UpdateUrlTextBox(TabControl1.SelectedTab, url)
             UpdateTabText(TabControl1.SelectedTab, url)
         End If
     End Sub
+
     Private Async Sub InitializeAsync()
         Await WebView2.EnsureCoreWebView2Async(Nothing)
         AddHandler WebView2.NavigationCompleted, AddressOf OnNavigationCompleted
@@ -305,6 +327,13 @@ Public Class Browser
 
         Dim historyItem As New HistoryItem(url, title, visitDate)
         historyList.Add(historyItem)
+    End Sub
+
+    Private Sub UpdateUrlTextBox(tab As TabPage, url As String)
+        Dim textBoxUrl = CType(tab.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
+        If textBoxUrl IsNot Nothing Then
+            textBoxUrl.Text = url
+        End If
     End Sub
 
     Private Async Sub NewTabToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewTabToolStripMenuItem.Click
@@ -322,5 +351,21 @@ Public Class Browser
 
     Private Sub AddToBookmarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddToBookmarksToolStripMenuItem.Click
         MessageBox.Show("Coming Soon.")
+    End Sub
+
+    Private Sub ViewCacheToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewCacheToolStripMenuItem.Click
+        MessageBox.Show("Coming Soon.")
+    End Sub
+
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        About.Show()
+    End Sub
+
+    Private Sub ViewDownloadsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewDownloadsToolStripMenuItem.Click
+        If WebView2.CoreWebView2 IsNot Nothing Then
+            WebView2.CoreWebView2.OpenDefaultDownloadDialog()
+        Else
+            MessageBox.Show("WebView2 is not initialized.")
+        End If
     End Sub
 End Class

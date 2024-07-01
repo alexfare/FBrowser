@@ -1,10 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\My Project\PublishProfiles\ClickOnceProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Update="BookmarkForm.vb">
+    <Compile Update="About.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Browser.vb">
+    <Compile Update="BookmarkForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="HistoryForm.vb">

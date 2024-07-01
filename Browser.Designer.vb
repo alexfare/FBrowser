@@ -42,6 +42,9 @@ Partial Class Browser
         BookmarkToolStripMenuItem = New ToolStripMenuItem()
         ViewBookmarksToolStripMenuItem = New ToolStripMenuItem()
         AddToBookmarksToolStripMenuItem = New ToolStripMenuItem()
+        ViewDownloadsToolStripMenuItem = New ToolStripMenuItem()
+        ViewCacheToolStripMenuItem = New ToolStripMenuItem()
+        AboutToolStripMenuItem = New ToolStripMenuItem()
         TabControl1.SuspendLayout()
         TabPage1.SuspendLayout()
         FlowLayoutPanel1.SuspendLayout()
@@ -54,10 +57,12 @@ Partial Class Browser
         ' 
         TabControl1.Controls.Add(TabPage1)
         TabControl1.Dock = DockStyle.Fill
+        TabControl1.DrawMode = TabDrawMode.OwnerDrawFixed
         TabControl1.Location = New Point(0, 24)
         TabControl1.Name = "TabControl1"
         TabControl1.SelectedIndex = 0
         TabControl1.Size = New Size(800, 579)
+        TabControl1.SizeMode = TabSizeMode.Fixed
         TabControl1.TabIndex = 0
         ' 
         ' TabPage1
@@ -82,39 +87,39 @@ Partial Class Browser
         FlowLayoutPanel1.Dock = DockStyle.Top
         FlowLayoutPanel1.Location = New Point(3, 3)
         FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        FlowLayoutPanel1.Size = New Size(786, 29)
+        FlowLayoutPanel1.Size = New Size(786, 34)
         FlowLayoutPanel1.TabIndex = 7
         ' 
         ' BtnBack
         ' 
         BtnBack.Location = New Point(3, 3)
         BtnBack.Name = "BtnBack"
-        BtnBack.Size = New Size(75, 23)
+        BtnBack.Size = New Size(66, 23)
         BtnBack.TabIndex = 0
         BtnBack.Text = "Back"
         BtnBack.UseVisualStyleBackColor = True
         ' 
         ' BtnRefresh
         ' 
-        BtnRefresh.Location = New Point(84, 3)
+        BtnRefresh.Location = New Point(75, 3)
         BtnRefresh.Name = "BtnRefresh"
-        BtnRefresh.Size = New Size(75, 23)
+        BtnRefresh.Size = New Size(56, 23)
         BtnRefresh.TabIndex = 1
         BtnRefresh.Text = "Refresh"
         BtnRefresh.UseVisualStyleBackColor = True
         ' 
         ' BtnForward
         ' 
-        BtnForward.Location = New Point(165, 3)
+        BtnForward.Location = New Point(137, 3)
         BtnForward.Name = "BtnForward"
-        BtnForward.Size = New Size(75, 23)
+        BtnForward.Size = New Size(61, 23)
         BtnForward.TabIndex = 2
         BtnForward.Text = "Forward"
         BtnForward.UseVisualStyleBackColor = True
         ' 
         ' TextBox1
         ' 
-        TextBox1.Location = New Point(246, 3)
+        TextBox1.Location = New Point(204, 3)
         TextBox1.Name = "TextBox1"
         TextBox1.Size = New Size(447, 23)
         TextBox1.TabIndex = 3
@@ -122,9 +127,9 @@ Partial Class Browser
         ' BtnGo
         ' 
         BtnGo.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        BtnGo.Location = New Point(699, 3)
+        BtnGo.Location = New Point(657, 3)
         BtnGo.Name = "BtnGo"
-        BtnGo.Size = New Size(75, 23)
+        BtnGo.Size = New Size(56, 23)
         BtnGo.TabIndex = 4
         BtnGo.Text = "Go"
         BtnGo.UseVisualStyleBackColor = True
@@ -132,9 +137,9 @@ Partial Class Browser
         ' Panel1
         ' 
         Panel1.Controls.Add(WebView2)
-        Panel1.Location = New Point(3, 38)
+        Panel1.Location = New Point(3, 43)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(781, 529)
+        Panel1.Size = New Size(781, 524)
         Panel1.TabIndex = 6
         ' 
         ' WebView2
@@ -150,7 +155,7 @@ Partial Class Browser
         ' 
         ' MenuStrip1
         ' 
-        MenuStrip1.Items.AddRange(New ToolStripItem() {NewTabToolStripMenuItem, HistoryToolStripMenuItem})
+        MenuStrip1.Items.AddRange(New ToolStripItem() {NewTabToolStripMenuItem, HistoryToolStripMenuItem, AboutToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
         MenuStrip1.Size = New Size(800, 24)
@@ -165,7 +170,7 @@ Partial Class Browser
         ' 
         ' HistoryToolStripMenuItem
         ' 
-        HistoryToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {HistoryToolStripMenuItem1, BookmarkToolStripMenuItem})
+        HistoryToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {HistoryToolStripMenuItem1, BookmarkToolStripMenuItem, ViewDownloadsToolStripMenuItem, ViewCacheToolStripMenuItem})
         HistoryToolStripMenuItem.Name = "HistoryToolStripMenuItem"
         HistoryToolStripMenuItem.Size = New Size(135, 20)
         HistoryToolStripMenuItem.Text = "Browser Management"
@@ -174,7 +179,7 @@ Partial Class Browser
         ' 
         HistoryToolStripMenuItem1.DropDownItems.AddRange(New ToolStripItem() {ViewHistoryToolStripMenuItem1, ClearHistoryToolStripMenuItem1})
         HistoryToolStripMenuItem1.Name = "HistoryToolStripMenuItem1"
-        HistoryToolStripMenuItem1.Size = New Size(133, 22)
+        HistoryToolStripMenuItem1.Size = New Size(161, 22)
         HistoryToolStripMenuItem1.Text = "History"
         ' 
         ' ViewHistoryToolStripMenuItem1
@@ -193,7 +198,7 @@ Partial Class Browser
         ' 
         BookmarkToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ViewBookmarksToolStripMenuItem, AddToBookmarksToolStripMenuItem})
         BookmarkToolStripMenuItem.Name = "BookmarkToolStripMenuItem"
-        BookmarkToolStripMenuItem.Size = New Size(133, 22)
+        BookmarkToolStripMenuItem.Size = New Size(161, 22)
         BookmarkToolStripMenuItem.Text = "Bookmarks"
         ' 
         ' ViewBookmarksToolStripMenuItem
@@ -207,6 +212,24 @@ Partial Class Browser
         AddToBookmarksToolStripMenuItem.Name = "AddToBookmarksToolStripMenuItem"
         AddToBookmarksToolStripMenuItem.Size = New Size(161, 22)
         AddToBookmarksToolStripMenuItem.Text = "Bookmark Page"
+        ' 
+        ' ViewDownloadsToolStripMenuItem
+        ' 
+        ViewDownloadsToolStripMenuItem.Name = "ViewDownloadsToolStripMenuItem"
+        ViewDownloadsToolStripMenuItem.Size = New Size(161, 22)
+        ViewDownloadsToolStripMenuItem.Text = "View Downloads"
+        ' 
+        ' ViewCacheToolStripMenuItem
+        ' 
+        ViewCacheToolStripMenuItem.Name = "ViewCacheToolStripMenuItem"
+        ViewCacheToolStripMenuItem.Size = New Size(161, 22)
+        ViewCacheToolStripMenuItem.Text = "View Cache"
+        ' 
+        ' AboutToolStripMenuItem
+        ' 
+        AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        AboutToolStripMenuItem.Size = New Size(52, 20)
+        AboutToolStripMenuItem.Text = "About"
         ' 
         ' Browser
         ' 
@@ -251,5 +274,8 @@ Partial Class Browser
     Friend WithEvents BookmarkToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ViewBookmarksToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AddToBookmarksToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ViewCacheToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ViewDownloadsToolStripMenuItem As ToolStripMenuItem
 
 End Class

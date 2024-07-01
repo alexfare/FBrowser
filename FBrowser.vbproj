@@ -7,6 +7,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
     <ApplicationIcon>FBrowser_Logo.ico</ApplicationIcon>
+    <Description>Fbrowser is fast and lightweight, running on Chromium/Edge WebView2. Get a fully functioning browsing experience, backed by the security and performance of the Chromium engine.</Description>
+    <PackageProjectUrl>alexfare.com</PackageProjectUrl>
+    <PackageIcon>FBrowser_Logo.ico</PackageIcon>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/alexfare/FBrowser</RepositoryUrl>
+    <Copyright>AlexFare 2024</Copyright>
+    <Company>Fare</Company>
+    <Authors>Alex Fare</Authors>
+    <Title>FBrowser</Title>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +26,13 @@
     <Import Include="System.Data" />
     <Import Include="System.Drawing" />
     <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\Downloads\Pictures\FBrowser_Logo.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
