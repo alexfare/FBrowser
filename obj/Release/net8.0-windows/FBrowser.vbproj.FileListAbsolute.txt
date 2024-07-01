@@ -25,3 +25,4 @@ C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-wi
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-windows\FBrowser.BookmarkForm.resources
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-windows\FBrowser.HistoryForm.resources
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-windows\FBrowser.Resources.resources
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-windows\FBrowser.About.resources

@@ -13,13 +13,18 @@ Option Explicit On
 
 Imports System
 Imports System.Reflection
-<Assembly: System.Reflection.AssemblyCompanyAttribute("FBrowser"),  _
+<Assembly: System.Reflection.AssemblyCompanyAttribute("Fare"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
+ Assembly: System.Reflection.AssemblyCopyrightAttribute("AlexFare 2024"),  _
+ Assembly: System.Reflection.AssemblyDescriptionAttribute("Fbrowser is fast and lightweight, running on Chromium/Edge WebView2. Get a fully "& _ 
+    "functioning browsing experience, backed by the security and performance of the C"& _ 
+    "hromium engine."),  _
  Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0"),  _
  Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("FBrowser"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("FBrowser"),  _
  Assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0"),  _
+ Assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/alexfare/FBrowser"),  _
  Assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0"),  _
  Assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")> 
 

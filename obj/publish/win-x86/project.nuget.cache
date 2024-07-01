@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "IsdqhDz+qxcZM2e+h6VpSqzsIzdvNw1NA2U2OIMkpzLFmOefjqRPqDeynuiARJqV6meRT2zU7A7bvmScWC9IzA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\alex.fare\\OneDrive\\!Projects\\VisualBasic\\FBrowser\\FBrowser.vbproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\alex.fare\\.nuget\\packages\\microsoft.web.webview2\\1.0.2592.51\\microsoft.web.webview2.1.0.2592.51.nupkg.sha512"
+  ],
+  "logs": []
+}
