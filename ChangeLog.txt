@@ -1,12 +1,9 @@
-Todo:
-Change starting page - Completed
-Bookmarks
-Settings Page
-Cache Info
-Download Manager
-Fix Tabs
-Display Favicon
-History Page - Completed
+v1.1.0.4
+Updated About Display.
+Updated History Display.
+Fixed URL focus on New Tab.
+Fixed URL focus on start up.
+Fixed URL highlighting.
 
 v1.1.0.3
 Fixed URL link updating.

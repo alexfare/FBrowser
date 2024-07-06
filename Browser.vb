@@ -16,6 +16,13 @@ Public Class Browser
         AddHandler TabControl1.DrawItem, AddressOf TabControl1_DrawItem
 
         InitializeAsync()
+
+        ' Set focus to the URL TextBox of the current tab
+        Dim currentTab = TabControl1.SelectedTab
+        Dim textBoxUrl = CType(currentTab.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
+        If textBoxUrl IsNot Nothing Then
+            textBoxUrl.Focus()
+        End If
     End Sub
 
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
@@ -39,6 +46,11 @@ Public Class Browser
             e.Handled = True
             URLSearch()
         End If
+    End Sub
+
+    ' Highlight the text when TextBox1 receives focus
+    Private Sub TextBox1_Enter(sender As Object, e As EventArgs) Handles TextBox1.Enter
+        TextBox1.SelectAll()
     End Sub
 
     Private Sub URLSearch()
@@ -198,6 +210,9 @@ Public Class Browser
         Catch ex As Exception
             MessageBox.Show("Failed to initialize WebView2 runtime.", "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
+        ' Set focus to the URL TextBox of the new tab
+        textBoxUrl.Focus()
 
         ' Add a resize event to update the TextBox size when the form is resized
         AddHandler navPanel.Resize, Sub(sender, e)
