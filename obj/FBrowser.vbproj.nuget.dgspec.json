@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FBrowser\\Latest\\FBrowser.vbproj": {}
+    "C:\\Users\\alex.fare\\OneDrive\\!Projects\\VisualBasic\\FBrowser\\FBrowser.vbproj": {}
   },
   "projects": {
-    "D:\\FBrowser\\Latest\\FBrowser.vbproj": {
+    "C:\\Users\\alex.fare\\OneDrive\\!Projects\\VisualBasic\\FBrowser\\FBrowser.vbproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FBrowser\\Latest\\FBrowser.vbproj",
+        "projectUniqueName": "C:\\Users\\alex.fare\\OneDrive\\!Projects\\VisualBasic\\FBrowser\\FBrowser.vbproj",
         "projectName": "FBrowser",
-        "projectPath": "D:\\FBrowser\\Latest\\FBrowser.vbproj",
-        "packagesPath": "C:\\Users\\alexf\\.nuget\\packages\\",
-        "outputPath": "D:\\FBrowser\\Latest\\obj\\",
+        "projectPath": "C:\\Users\\alex.fare\\OneDrive\\!Projects\\VisualBasic\\FBrowser\\FBrowser.vbproj",
+        "packagesPath": "C:\\Users\\alex.fare\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alex.fare\\OneDrive\\!Projects\\VisualBasic\\FBrowser\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\alexf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\alex.fare\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -69,7 +69,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
