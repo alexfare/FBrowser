@@ -13,11 +13,6 @@
         Next
     End Sub
 
-    Private Sub btnClearHistory_Click(sender As Object, e As EventArgs)
-        historyList.Clear()
-        ListBox1.Items.Clear()
-    End Sub
-
     Private Sub ClearHistoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClearHistoryToolStripMenuItem.Click
         historyList.Clear()
         ListBox1.Items.Clear()

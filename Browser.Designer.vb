@@ -179,26 +179,26 @@ Partial Class Browser
         ' 
         HistoryToolStripMenuItem1.DropDownItems.AddRange(New ToolStripItem() {ViewHistoryToolStripMenuItem1, ClearHistoryToolStripMenuItem1})
         HistoryToolStripMenuItem1.Name = "HistoryToolStripMenuItem1"
-        HistoryToolStripMenuItem1.Size = New Size(161, 22)
+        HistoryToolStripMenuItem1.Size = New Size(180, 22)
         HistoryToolStripMenuItem1.Text = "History"
         ' 
         ' ViewHistoryToolStripMenuItem1
         ' 
         ViewHistoryToolStripMenuItem1.Name = "ViewHistoryToolStripMenuItem1"
-        ViewHistoryToolStripMenuItem1.Size = New Size(142, 22)
+        ViewHistoryToolStripMenuItem1.Size = New Size(180, 22)
         ViewHistoryToolStripMenuItem1.Text = "View History"
         ' 
         ' ClearHistoryToolStripMenuItem1
         ' 
         ClearHistoryToolStripMenuItem1.Name = "ClearHistoryToolStripMenuItem1"
-        ClearHistoryToolStripMenuItem1.Size = New Size(142, 22)
+        ClearHistoryToolStripMenuItem1.Size = New Size(180, 22)
         ClearHistoryToolStripMenuItem1.Text = "Clear History"
         ' 
         ' BookmarkToolStripMenuItem
         ' 
         BookmarkToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ViewBookmarksToolStripMenuItem, AddToBookmarksToolStripMenuItem})
         BookmarkToolStripMenuItem.Name = "BookmarkToolStripMenuItem"
-        BookmarkToolStripMenuItem.Size = New Size(161, 22)
+        BookmarkToolStripMenuItem.Size = New Size(180, 22)
         BookmarkToolStripMenuItem.Text = "Bookmarks"
         ' 
         ' ViewBookmarksToolStripMenuItem
@@ -216,13 +216,13 @@ Partial Class Browser
         ' ViewDownloadsToolStripMenuItem
         ' 
         ViewDownloadsToolStripMenuItem.Name = "ViewDownloadsToolStripMenuItem"
-        ViewDownloadsToolStripMenuItem.Size = New Size(161, 22)
+        ViewDownloadsToolStripMenuItem.Size = New Size(180, 22)
         ViewDownloadsToolStripMenuItem.Text = "View Downloads"
         ' 
         ' ViewCacheToolStripMenuItem
         ' 
         ViewCacheToolStripMenuItem.Name = "ViewCacheToolStripMenuItem"
-        ViewCacheToolStripMenuItem.Size = New Size(161, 22)
+        ViewCacheToolStripMenuItem.Size = New Size(180, 22)
         ViewCacheToolStripMenuItem.Text = "View Cache"
         ' 
         ' AboutToolStripMenuItem

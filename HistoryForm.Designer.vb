@@ -28,8 +28,8 @@ Partial Class HistoryForm
         Panel1 = New Panel()
         MenuStrip1 = New MenuStrip()
         FileToolStripMenuItem = New ToolStripMenuItem()
-        ClearHistoryToolStripMenuItem = New ToolStripMenuItem()
         CloseToolStripMenuItem = New ToolStripMenuItem()
+        ClearHistoryToolStripMenuItem = New ToolStripMenuItem()
         Panel1.SuspendLayout()
         MenuStrip1.SuspendLayout()
         SuspendLayout()
@@ -42,25 +42,25 @@ Partial Class HistoryForm
         ListBox1.ItemHeight = 15
         ListBox1.Location = New Point(0, 0)
         ListBox1.Name = "ListBox1"
-        ListBox1.Size = New Size(441, 501)
+        ListBox1.Size = New Size(530, 475)
         ListBox1.TabIndex = 0
         ' 
         ' History
         ' 
         History.AutoSize = True
-        History.Font = New Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        History.Location = New Point(0, 24)
+        History.Font = New Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        History.Location = New Point(12, 24)
         History.Name = "History"
-        History.Size = New Size(113, 37)
+        History.Size = New Size(78, 25)
         History.TabIndex = 2
         History.Text = "History"
         ' 
         ' Panel1
         ' 
         Panel1.Controls.Add(ListBox1)
-        Panel1.Location = New Point(12, 64)
+        Panel1.Location = New Point(12, 52)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(441, 501)
+        Panel1.Size = New Size(530, 475)
         Panel1.TabIndex = 3
         ' 
         ' MenuStrip1
@@ -68,7 +68,7 @@ Partial Class HistoryForm
         MenuStrip1.Items.AddRange(New ToolStripItem() {FileToolStripMenuItem, ClearHistoryToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
-        MenuStrip1.Size = New Size(464, 24)
+        MenuStrip1.Size = New Size(554, 24)
         MenuStrip1.TabIndex = 4
         MenuStrip1.Text = "MenuStrip1"
         ' 
@@ -79,23 +79,23 @@ Partial Class HistoryForm
         FileToolStripMenuItem.Size = New Size(37, 20)
         FileToolStripMenuItem.Text = "File"
         ' 
-        ' ClearHistoryToolStripMenuItem
-        ' 
-        ClearHistoryToolStripMenuItem.Name = "ClearHistoryToolStripMenuItem"
-        ClearHistoryToolStripMenuItem.Size = New Size(87, 20)
-        ClearHistoryToolStripMenuItem.Text = "Clear History"
-        ' 
         ' CloseToolStripMenuItem
         ' 
         CloseToolStripMenuItem.Name = "CloseToolStripMenuItem"
         CloseToolStripMenuItem.Size = New Size(180, 22)
         CloseToolStripMenuItem.Text = "Close"
         ' 
+        ' ClearHistoryToolStripMenuItem
+        ' 
+        ClearHistoryToolStripMenuItem.Name = "ClearHistoryToolStripMenuItem"
+        ClearHistoryToolStripMenuItem.Size = New Size(87, 20)
+        ClearHistoryToolStripMenuItem.Text = "Clear History"
+        ' 
         ' HistoryForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(464, 575)
+        ClientSize = New Size(554, 541)
         Controls.Add(Panel1)
         Controls.Add(History)
         Controls.Add(MenuStrip1)

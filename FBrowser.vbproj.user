@@ -13,8 +13,5 @@
     <Compile Update="Browser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="HistoryForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
 </Project>

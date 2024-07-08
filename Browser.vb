@@ -383,4 +383,8 @@ Public Class Browser
             MessageBox.Show("WebView2 is not initialized.")
         End If
     End Sub
+
+    Private Sub ClearHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClearHistoryToolStripMenuItem1.Click
+
+    End Sub
 End Class
