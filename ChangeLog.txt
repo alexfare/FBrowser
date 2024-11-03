@@ -8,6 +8,22 @@ Fix Tabs - Completed
 Display Favicon
 History Page - Completed
 
+v1.3.2.9
+Updated About Page.
+
+v1.3.1.8
+Update WebView - v1.0.2849.39
+
+v1.3.1.7
+Update WebView - v1.0.2792.45
+
+v1.3.0.6
+Fixed version not updating on about menu.
+Updated Toolbar Menu.
+Correcting code.
+Updated start menu.
+Update WebView - v1.0.2651.64
+
 v1.2.0.5
 Correcting Installer.
 

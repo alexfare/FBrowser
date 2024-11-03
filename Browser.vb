@@ -5,19 +5,18 @@ Public Class Browser
     Private historyList As New List(Of HistoryItem)
 
     Private Async Sub Browser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Clear any existing tabs
+        historyList = BrowserHistoryManager.LoadHistory()
         TabControl1.TabPages.Clear()
-        ' Initialize the first tab with default URL
-        Await AddNewTab("https://sites.google.com/view/alexfare-com/home") 'Allow user to change this in the future
+        Await AddNewTab("https://alexfare.com") 'Allow user to change this in the future
 
-        ' Set the tab size and draw mode
+        'Set the tab size and draw mode
         TabControl1.DrawMode = TabDrawMode.OwnerDrawFixed
         TabControl1.ItemSize = New Size(145, 25) ' Set a fixed size for tabs
         AddHandler TabControl1.DrawItem, AddressOf TabControl1_DrawItem
 
         InitializeAsync()
 
-        ' Set focus to the URL TextBox of the current tab
+        'Set focus to the URL TextBox of the current tab
         Dim currentTab = TabControl1.SelectedTab
         Dim textBoxUrl = CType(currentTab.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
         If textBoxUrl IsNot Nothing Then
@@ -41,22 +40,21 @@ Public Class Browser
         URLSearch()
     End Sub
 
-    Private Sub TextBox1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox1.KeyPress
+    Private Sub TxtURL_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TxtURL.KeyPress
         If e.KeyChar = Convert.ToChar(Keys.Enter) Then
             e.Handled = True
             URLSearch()
         End If
     End Sub
 
-    ' Highlight the text when TextBox1 receives focus
-    Private Sub TextBox1_Enter(sender As Object, e As EventArgs) Handles TextBox1.Enter
-        TextBox1.SelectAll()
+    'Highlight the text when TxtURL receives focus
+    Private Sub TxtURL_Enter(sender As Object, e As EventArgs) Handles TxtURL.Enter
+        TxtURL.SelectAll()
     End Sub
 
     Private Sub URLSearch()
         Dim currentWebView = GetCurrentWebView()
         If currentWebView IsNot Nothing AndAlso currentWebView.CoreWebView2 IsNot Nothing Then
-            ' Find the URL textbox within the selected tab
             Dim currentTab = TabControl1.SelectedTab
             Dim textBoxUrl = CType(currentTab.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
             If textBoxUrl IsNot Nothing Then
@@ -98,50 +96,40 @@ Public Class Browser
     Private Async Function AddNewTab(Optional url As String = "") As Task
         Dim newTab As New TabPage("New Tab")
 
-        ' Create a panel for the navigation controls
         Dim navPanel As New Panel With {
             .Dock = DockStyle.Top,
-            .Height = 30 ' Adjust height as needed
+            .Height = 30
         }
 
-        ' Create navigation controls
         Dim btnBack As New Button With {.Text = "Back", .Width = 60, .Left = 10}
         Dim btnRefresh As New Button With {.Text = "Refresh", .Width = 60, .Left = 80}
         Dim btnForward As New Button With {.Text = "Forward", .Width = 60, .Left = 150}
         Dim btnGo As New Button With {.Text = "Go", .Width = 60, .Anchor = AnchorStyles.Top Or AnchorStyles.Right}
-
-        ' Calculate remaining width for textBoxUrl
         Dim initialLeftPosition As Integer = 220
         Dim rightPadding As Integer = 10
         Dim textBoxUrlWidth As Integer = navPanel.Width - (initialLeftPosition + btnGo.Width + rightPadding)
 
         Dim textBoxUrl As New TextBox With {.Left = initialLeftPosition, .Name = "textBoxUrl", .Width = textBoxUrlWidth, .Anchor = AnchorStyles.Left Or AnchorStyles.Right}
 
-        ' Position the Go button to the right of the textBoxUrl
         btnGo.Left = textBoxUrl.Left + textBoxUrl.Width + 10
 
-        ' Add navigation controls to the panel
         navPanel.Controls.Add(btnBack)
         navPanel.Controls.Add(btnRefresh)
         navPanel.Controls.Add(btnForward)
         navPanel.Controls.Add(textBoxUrl)
         navPanel.Controls.Add(btnGo)
 
-        ' Create WebView2 control
         Dim newWebView As New Microsoft.Web.WebView2.WinForms.WebView2 With {
             .Name = "WebView2",
             .Dock = DockStyle.Fill
         }
 
-        ' Add the panel and WebView2 to the tab page
         newTab.Controls.Add(newWebView)
         newTab.Controls.Add(navPanel)
 
-        ' Add the tab page to the TabControl
         TabControl1.TabPages.Add(newTab)
         TabControl1.SelectedTab = newTab
 
-        ' Event handlers for the navigation buttons
         AddHandler btnBack.Click, Sub(sender, e)
                                       If newWebView.CoreWebView2 IsNot Nothing Then
                                           newWebView.CoreWebView2.GoBack()
@@ -166,7 +154,6 @@ Public Class Browser
                                     End If
                                 End Sub
 
-        ' Event handler for the URL textbox key press
         AddHandler textBoxUrl.KeyPress, Sub(sender, e)
                                             If e.KeyChar = Convert.ToChar(Keys.Enter) Then
                                                 e.Handled = True
@@ -176,11 +163,9 @@ Public Class Browser
                                             End If
                                         End Sub
 
-        ' Handle the NewWindowRequested event
-        AddHandler newWebView.CoreWebView2InitializationCompleted, Async Sub(sender, args)
+        AddHandler newWebView.CoreWebView2InitializationCompleted, Sub(sender, args)
                                                                        If args.IsSuccess Then
                                                                            AddHandler newWebView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
-                                                                           ' Navigate to the URL if provided
                                                                            If Not String.IsNullOrEmpty(url) Then
                                                                                NavigateToUrl(newWebView, url)
                                                                                UpdateTabText(newTab, url)
@@ -188,7 +173,6 @@ Public Class Browser
                                                                        End If
                                                                    End Sub
 
-        ' Add navigation starting and completed event handlers
         AddHandler newWebView.NavigationStarting, Sub(sender, e)
                                                       UpdateUrlTextBox(newTab, e.Uri)
                                                   End Sub
@@ -196,8 +180,7 @@ Public Class Browser
                                                        UpdateUrlTextBox(newTab, newWebView.Source.ToString())
                                                        OnNavigationCompleted(newWebView, e)
                                                    End Sub
-        ' Add document title changed event handler
-        AddHandler newWebView.CoreWebView2InitializationCompleted, Async Sub(sender, args)
+        AddHandler newWebView.CoreWebView2InitializationCompleted, Sub(sender, args)
                                                                        If args.IsSuccess Then
                                                                            AddHandler newWebView.CoreWebView2.DocumentTitleChanged, Sub()
                                                                                                                                         UpdateTabTitle(newTab, newWebView.CoreWebView2.DocumentTitle)
@@ -211,10 +194,8 @@ Public Class Browser
             MessageBox.Show("Failed to initialize WebView2 runtime.", "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
-        ' Set focus to the URL TextBox of the new tab
         textBoxUrl.Focus()
 
-        ' Add a resize event to update the TextBox size when the form is resized
         AddHandler navPanel.Resize, Sub(sender, e)
                                         textBoxUrl.Width = navPanel.Width - (initialLeftPosition + btnGo.Width + rightPadding + 10)
                                         btnGo.Left = textBoxUrl.Left + textBoxUrl.Width + 10
@@ -235,7 +216,7 @@ Public Class Browser
     End Sub
 
     Private Async Sub CoreWebView2_NewWindowRequested(sender As Object, e As CoreWebView2NewWindowRequestedEventArgs)
-        e.Handled = True ' Prevent the default new window behavior
+        e.Handled = True
         Await AddNewTab()
         Dim newWebView = GetCurrentWebView()
         If newWebView IsNot Nothing Then
@@ -249,7 +230,7 @@ Public Class Browser
             domainName = domainName.Substring(0, 25)
         End If
         tab.Text = domainName.PadRight(25)
-        TabControl1.Invalidate() ' Force redraw of the TabControl
+        TabControl1.Invalidate()
     End Sub
 
     Private Sub UpdateTabTitle(tab As TabPage, title As String)
@@ -258,7 +239,7 @@ Public Class Browser
         Else
             tab.Text = title.PadRight(25)
         End If
-        TabControl1.Invalidate() ' Force redraw of the TabControl
+        TabControl1.Invalidate()
     End Sub
 
     Private Function GetDomainNameFromUrl(url As String) As String
@@ -283,21 +264,17 @@ Public Class Browser
         Dim tabPage = TabControl1.TabPages(e.Index)
         Dim tabRect = TabControl1.GetTabRect(e.Index)
         Dim closeButtonSize = 10
-        Dim closeButtonPadding = 7 ' Adjust the padding to ensure space between text and button
+        Dim closeButtonPadding = 7 'Adjust the padding to ensure space between text and button
 
-        ' Calculate the position for the close button
         Dim closeButtonX = tabRect.Right - closeButtonSize - closeButtonPadding
         Dim closeButtonRect = New Rectangle(closeButtonX, tabRect.Top + (tabRect.Height - closeButtonSize) / 2, closeButtonSize, closeButtonSize)
 
-        ' Center the text vertically but keep it to the left
         Dim textHeight = TextRenderer.MeasureText(tabPage.Text, tabPage.Font).Height
         Dim textY = tabRect.Top + (tabRect.Height - textHeight) / 2
 
-        ' Draw the tab header text
         Dim textRect = New Rectangle(tabRect.X + closeButtonPadding, textY, tabRect.Width - closeButtonSize - closeButtonPadding * 2, tabRect.Height)
         TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, textRect, tabPage.ForeColor, TextFormatFlags.Left)
 
-        ' Draw the close button
         e.Graphics.DrawRectangle(Pens.Black, closeButtonRect)
         e.Graphics.DrawLine(Pens.Black, closeButtonRect.Left, closeButtonRect.Top, closeButtonRect.Right, closeButtonRect.Bottom)
         e.Graphics.DrawLine(Pens.Black, closeButtonRect.Right, closeButtonRect.Top, closeButtonRect.Left, closeButtonRect.Bottom)
@@ -305,7 +282,7 @@ Public Class Browser
 
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
         Dim closeButtonSize = 10
-        Dim closeButtonPadding = 7 ' Adjust the padding to ensure space between text and button
+        Dim closeButtonPadding = 7 'Adjust the padding to ensure space between text and button
 
         For i As Integer = 0 To TabControl1.TabPages.Count - 1
             Dim tabRect = TabControl1.GetTabRect(i)
@@ -342,7 +319,10 @@ Public Class Browser
 
         Dim historyItem As New HistoryItem(url, title, visitDate)
         historyList.Add(historyItem)
+
+        BrowserHistoryManager.SaveHistory(historyList)
     End Sub
+
 
     Private Sub UpdateUrlTextBox(tab As TabPage, url As String)
         Dim textBoxUrl = CType(tab.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
@@ -356,9 +336,10 @@ Public Class Browser
     End Sub
 
     Private Sub ViewHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ViewHistoryToolStripMenuItem1.Click
-        Dim historyForm As New HistoryForm(historyList)
+        Dim historyForm As New HistoryForm()
         historyForm.Show()
     End Sub
+
 
     Private Sub ViewBookmarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewBookmarksToolStripMenuItem.Click
         MessageBox.Show("Coming Soon.")
@@ -372,10 +353,6 @@ Public Class Browser
         MessageBox.Show("Coming Soon.")
     End Sub
 
-    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
-        About.Show()
-    End Sub
-
     Private Sub ViewDownloadsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewDownloadsToolStripMenuItem.Click
         If WebView2.CoreWebView2 IsNot Nothing Then
             WebView2.CoreWebView2.OpenDefaultDownloadDialog()
@@ -384,7 +361,11 @@ Public Class Browser
         End If
     End Sub
 
-    Private Sub ClearHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClearHistoryToolStripMenuItem1.Click
+    Private Sub AboutToolStripMenuItem_Click_1(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        About.Show()
+    End Sub
 
+    Private Sub DeleteCacheToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteCacheToolStripMenuItem.Click
+        MessageBox.Show("Coming Soon.")
     End Sub
 End Class

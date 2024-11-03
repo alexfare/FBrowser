@@ -170,7 +170,7 @@ Partial Class About
         Name = "About"
         Padding = New Padding(10)
         ShowInTaskbar = False
-        StartPosition = FormStartPosition.CenterParent
+        StartPosition = FormStartPosition.CenterScreen
         Text = "About"
         TableLayoutPanel.ResumeLayout(False)
         TableLayoutPanel.PerformLayout()

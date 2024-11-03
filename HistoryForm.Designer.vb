@@ -30,6 +30,7 @@ Partial Class HistoryForm
         FileToolStripMenuItem = New ToolStripMenuItem()
         CloseToolStripMenuItem = New ToolStripMenuItem()
         ClearHistoryToolStripMenuItem = New ToolStripMenuItem()
+        RefreshToolStripMenuItem = New ToolStripMenuItem()
         Panel1.SuspendLayout()
         MenuStrip1.SuspendLayout()
         SuspendLayout()
@@ -65,7 +66,7 @@ Partial Class HistoryForm
         ' 
         ' MenuStrip1
         ' 
-        MenuStrip1.Items.AddRange(New ToolStripItem() {FileToolStripMenuItem, ClearHistoryToolStripMenuItem})
+        MenuStrip1.Items.AddRange(New ToolStripItem() {FileToolStripMenuItem, ClearHistoryToolStripMenuItem, RefreshToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
         MenuStrip1.Size = New Size(554, 24)
@@ -90,6 +91,12 @@ Partial Class HistoryForm
         ClearHistoryToolStripMenuItem.Name = "ClearHistoryToolStripMenuItem"
         ClearHistoryToolStripMenuItem.Size = New Size(87, 20)
         ClearHistoryToolStripMenuItem.Text = "Clear History"
+        ' 
+        ' RefreshToolStripMenuItem
+        ' 
+        RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
+        RefreshToolStripMenuItem.Size = New Size(58, 20)
+        RefreshToolStripMenuItem.Text = "Refresh"
         ' 
         ' HistoryForm
         ' 
@@ -117,4 +124,5 @@ Partial Class HistoryForm
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ClearHistoryToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CloseToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents RefreshToolStripMenuItem As ToolStripMenuItem
 End Class

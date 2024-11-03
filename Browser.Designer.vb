@@ -29,7 +29,7 @@ Partial Class Browser
         BtnBack = New Button()
         BtnRefresh = New Button()
         BtnForward = New Button()
-        TextBox1 = New TextBox()
+        TxtURL = New TextBox()
         BtnGo = New Button()
         Panel1 = New Panel()
         WebView2 = New Microsoft.Web.WebView2.WinForms.WebView2()
@@ -43,7 +43,11 @@ Partial Class Browser
         ViewBookmarksToolStripMenuItem = New ToolStripMenuItem()
         AddToBookmarksToolStripMenuItem = New ToolStripMenuItem()
         ViewDownloadsToolStripMenuItem = New ToolStripMenuItem()
+        CacheManagementToolStripMenuItem = New ToolStripMenuItem()
         ViewCacheToolStripMenuItem = New ToolStripMenuItem()
+        DeleteCacheToolStripMenuItem = New ToolStripMenuItem()
+        EditCacheToolStripMenuItem = New ToolStripMenuItem()
+        SettingsToolStripMenuItem = New ToolStripMenuItem()
         AboutToolStripMenuItem = New ToolStripMenuItem()
         TabControl1.SuspendLayout()
         TabPage1.SuspendLayout()
@@ -82,7 +86,7 @@ Partial Class Browser
         FlowLayoutPanel1.Controls.Add(BtnBack)
         FlowLayoutPanel1.Controls.Add(BtnRefresh)
         FlowLayoutPanel1.Controls.Add(BtnForward)
-        FlowLayoutPanel1.Controls.Add(TextBox1)
+        FlowLayoutPanel1.Controls.Add(TxtURL)
         FlowLayoutPanel1.Controls.Add(BtnGo)
         FlowLayoutPanel1.Dock = DockStyle.Top
         FlowLayoutPanel1.Location = New Point(3, 3)
@@ -117,12 +121,12 @@ Partial Class Browser
         BtnForward.Text = "Forward"
         BtnForward.UseVisualStyleBackColor = True
         ' 
-        ' TextBox1
+        ' TxtURL
         ' 
-        TextBox1.Location = New Point(204, 3)
-        TextBox1.Name = "TextBox1"
-        TextBox1.Size = New Size(447, 23)
-        TextBox1.TabIndex = 3
+        TxtURL.Location = New Point(204, 3)
+        TxtURL.Name = "TxtURL"
+        TxtURL.Size = New Size(447, 23)
+        TxtURL.TabIndex = 3
         ' 
         ' BtnGo
         ' 
@@ -155,7 +159,7 @@ Partial Class Browser
         ' 
         ' MenuStrip1
         ' 
-        MenuStrip1.Items.AddRange(New ToolStripItem() {NewTabToolStripMenuItem, HistoryToolStripMenuItem, AboutToolStripMenuItem})
+        MenuStrip1.Items.AddRange(New ToolStripItem() {NewTabToolStripMenuItem, HistoryToolStripMenuItem, SettingsToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
         MenuStrip1.Size = New Size(800, 24)
@@ -170,7 +174,7 @@ Partial Class Browser
         ' 
         ' HistoryToolStripMenuItem
         ' 
-        HistoryToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {HistoryToolStripMenuItem1, BookmarkToolStripMenuItem, ViewDownloadsToolStripMenuItem, ViewCacheToolStripMenuItem})
+        HistoryToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {HistoryToolStripMenuItem1, BookmarkToolStripMenuItem, ViewDownloadsToolStripMenuItem, CacheManagementToolStripMenuItem})
         HistoryToolStripMenuItem.Name = "HistoryToolStripMenuItem"
         HistoryToolStripMenuItem.Size = New Size(135, 20)
         HistoryToolStripMenuItem.Text = "Browser Management"
@@ -179,26 +183,26 @@ Partial Class Browser
         ' 
         HistoryToolStripMenuItem1.DropDownItems.AddRange(New ToolStripItem() {ViewHistoryToolStripMenuItem1, ClearHistoryToolStripMenuItem1})
         HistoryToolStripMenuItem1.Name = "HistoryToolStripMenuItem1"
-        HistoryToolStripMenuItem1.Size = New Size(180, 22)
+        HistoryToolStripMenuItem1.Size = New Size(181, 22)
         HistoryToolStripMenuItem1.Text = "History"
         ' 
         ' ViewHistoryToolStripMenuItem1
         ' 
         ViewHistoryToolStripMenuItem1.Name = "ViewHistoryToolStripMenuItem1"
-        ViewHistoryToolStripMenuItem1.Size = New Size(180, 22)
+        ViewHistoryToolStripMenuItem1.Size = New Size(142, 22)
         ViewHistoryToolStripMenuItem1.Text = "View History"
         ' 
         ' ClearHistoryToolStripMenuItem1
         ' 
         ClearHistoryToolStripMenuItem1.Name = "ClearHistoryToolStripMenuItem1"
-        ClearHistoryToolStripMenuItem1.Size = New Size(180, 22)
+        ClearHistoryToolStripMenuItem1.Size = New Size(142, 22)
         ClearHistoryToolStripMenuItem1.Text = "Clear History"
         ' 
         ' BookmarkToolStripMenuItem
         ' 
         BookmarkToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ViewBookmarksToolStripMenuItem, AddToBookmarksToolStripMenuItem})
         BookmarkToolStripMenuItem.Name = "BookmarkToolStripMenuItem"
-        BookmarkToolStripMenuItem.Size = New Size(180, 22)
+        BookmarkToolStripMenuItem.Size = New Size(181, 22)
         BookmarkToolStripMenuItem.Text = "Bookmarks"
         ' 
         ' ViewBookmarksToolStripMenuItem
@@ -216,19 +220,45 @@ Partial Class Browser
         ' ViewDownloadsToolStripMenuItem
         ' 
         ViewDownloadsToolStripMenuItem.Name = "ViewDownloadsToolStripMenuItem"
-        ViewDownloadsToolStripMenuItem.Size = New Size(180, 22)
+        ViewDownloadsToolStripMenuItem.Size = New Size(181, 22)
         ViewDownloadsToolStripMenuItem.Text = "View Downloads"
+        ' 
+        ' CacheManagementToolStripMenuItem
+        ' 
+        CacheManagementToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {ViewCacheToolStripMenuItem, DeleteCacheToolStripMenuItem, EditCacheToolStripMenuItem})
+        CacheManagementToolStripMenuItem.Name = "CacheManagementToolStripMenuItem"
+        CacheManagementToolStripMenuItem.Size = New Size(181, 22)
+        CacheManagementToolStripMenuItem.Text = "Cache Management"
         ' 
         ' ViewCacheToolStripMenuItem
         ' 
         ViewCacheToolStripMenuItem.Name = "ViewCacheToolStripMenuItem"
-        ViewCacheToolStripMenuItem.Size = New Size(180, 22)
+        ViewCacheToolStripMenuItem.Size = New Size(143, 22)
         ViewCacheToolStripMenuItem.Text = "View Cache"
+        ' 
+        ' DeleteCacheToolStripMenuItem
+        ' 
+        DeleteCacheToolStripMenuItem.Name = "DeleteCacheToolStripMenuItem"
+        DeleteCacheToolStripMenuItem.Size = New Size(143, 22)
+        DeleteCacheToolStripMenuItem.Text = "Delete Cache"
+        ' 
+        ' EditCacheToolStripMenuItem
+        ' 
+        EditCacheToolStripMenuItem.Name = "EditCacheToolStripMenuItem"
+        EditCacheToolStripMenuItem.Size = New Size(143, 22)
+        EditCacheToolStripMenuItem.Text = "Edit Cache"
+        ' 
+        ' SettingsToolStripMenuItem
+        ' 
+        SettingsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {AboutToolStripMenuItem})
+        SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
+        SettingsToolStripMenuItem.Size = New Size(61, 20)
+        SettingsToolStripMenuItem.Text = "Settings"
         ' 
         ' AboutToolStripMenuItem
         ' 
         AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        AboutToolStripMenuItem.Size = New Size(52, 20)
+        AboutToolStripMenuItem.Size = New Size(107, 22)
         AboutToolStripMenuItem.Text = "About"
         ' 
         ' Browser
@@ -257,7 +287,7 @@ Partial Class Browser
 
     Friend WithEvents TabControl1 As TabControl
     Friend WithEvents TabPage1 As TabPage
-    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents TxtURL As TextBox
     Friend WithEvents BtnGo As Button
     Friend WithEvents BtnForward As Button
     Friend WithEvents BtnRefresh As Button
@@ -274,8 +304,12 @@ Partial Class Browser
     Friend WithEvents BookmarkToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ViewBookmarksToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AddToBookmarksToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ViewCacheToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ViewDownloadsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents CacheManagementToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ViewCacheToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DeleteCacheToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents EditCacheToolStripMenuItem As ToolStripMenuItem
 
 End Class
