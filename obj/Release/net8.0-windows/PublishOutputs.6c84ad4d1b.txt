@@ -1,0 +1,15 @@
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\FBrowser.exe
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\runtimes\win-x86\native\WebView2Loader.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\runtimes\win-x64\native\WebView2Loader.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\runtimes\win-arm64\native\WebView2Loader.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\FBrowser.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\FBrowser.deps.json
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\FBrowser.runtimeconfig.json
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\FBrowser.dll.config
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\FBrowser.pdb
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\Microsoft.Web.WebView2.Core.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\Microsoft.Web.WebView2.WinForms.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\Microsoft.Web.WebView2.Wpf.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\Microsoft.Web.WebView2.Core.xml
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\Microsoft.Web.WebView2.WinForms.xml
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\app.publish\Microsoft.Web.WebView2.Wpf.xml

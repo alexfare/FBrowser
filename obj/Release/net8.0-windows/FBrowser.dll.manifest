@@ -54,22 +54,22 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="FBrowser.deps.json" size="2434">
+  <file name="FBrowser.deps.json" size="2824">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>uuHMv44gVyKiCcWT160byUHmr6MNOh2jeoLYuw5nL4A=</dsig:DigestValue>
+      <dsig:DigestValue>5Fn2USIm4cM3vmMoz9DIgB3ANJjMs99ASpF6G75GrLE=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="FBrowser.dll" size="373184">
+  <file name="FBrowser.dll" size="376768">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>JcT3FveH1kRvDsleMhi5Lre3ENfWhQzEC97w4gMCdtc=</dsig:DigestValue>
+      <dsig:DigestValue>Qn/tIRH+VcUAEsYGZoKyg7aa0WkxlVH+2oexn/UfRu0=</dsig:DigestValue>
     </hash>
   </file>
   <file name="FBrowser.dll.config" size="787">
@@ -81,13 +81,13 @@
       <dsig:DigestValue>2wExYd/kz8NbjITpqNMxQnf41HM7FTCtanGti1GN12s=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="FBrowser.exe" size="184768">
+  <file name="FBrowser.exe" size="216512">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>UVZ8y4AJ0Y5cvZ6eVIcDvcNHlv66R7XFBGsRf5wOnyo=</dsig:DigestValue>
+      <dsig:DigestValue>/2d+2BBqIH/Fy1tY4GpSYjv7tOvJyW13vYCB9i2SC5U=</dsig:DigestValue>
     </hash>
   </file>
   <file name="FBrowser.runtimeconfig.json" size="458">
@@ -135,16 +135,25 @@
       <dsig:DigestValue>ewrVQYCitsREOmjJMwnB5Blum6rrCmxYylsZLtDOhhU=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="runtimes\win-x86\native\WebView2Loader.dll" size="116328">
+  <file name="runtimes\win-arm64\native\WebView2Loader.dll" size="139840">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>zVvZzwaMMS7MbOCeHEE7aLoSOTWBrjhp2u9rIvcKDNY=</dsig:DigestValue>
+      <dsig:DigestValue>X+VOnWda8ynxQ4SeZJWMPkCoB0FrrFoZjYYcZojjshg=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="WebView2Loader.dll" size="116328">
+  <file name="runtimes\win-x64\native\WebView2Loader.dll" size="165952">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>HZY6Atin+j5+rC6Tba1VWcTWMyfzWwoJeH/8HVj5wY0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="runtimes\win-x86\native\WebView2Loader.dll" size="116328">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />

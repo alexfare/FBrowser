@@ -26,3 +26,39 @@ C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Debug\net8.0-wind
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Debug\net8.0-windows\FBrowser.Resources.resources
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Debug\net8.0-windows\FBrowser.BookmarkForm.resources
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Debug\net8.0-windows\FBrowser.About.resources
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.Core.xml
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.Wpf.xml
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.WinForms.xml
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Debug\net8.0-windows\FBrowser.dll.config
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\runtimes\win-x86\native\WebView2Loader.dll
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\runtimes\win-x64\native\WebView2Loader.dll
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\runtimes\win-arm64\native\WebView2Loader.dll
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\FBrowser.exe
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\FBrowser.dll.config
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\FBrowser.deps.json
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\FBrowser.runtimeconfig.json
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\FBrowser.dll
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\FBrowser.pdb
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.Core.dll
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.WinForms.dll
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.Wpf.dll
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.Core.xml
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.Wpf.xml
+D:\Visual Studio\FBrowser\bin\Debug\net8.0-windows\Microsoft.Web.WebView2.WinForms.xml
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.vbproj.AssemblyReference.cache
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.About.resources
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.BookmarkForm.resources
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.Browser.resources
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.HistoryForm.resources
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.Resources.resources
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.vbproj.GenerateResource.cache
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.GeneratedMSBuildEditorConfig.editorconfig
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.AssemblyInfoInputs.cache
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.AssemblyInfo.vb
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.vbproj.CoreCompileInputs.cache
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.vbproj.Up2Date
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.dll
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\refint\FBrowser.dll
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.pdb
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\FBrowser.genruntimeconfig.cache
+D:\Visual Studio\FBrowser\obj\Debug\net8.0-windows\ref\FBrowser.dll

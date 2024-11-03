@@ -4,7 +4,10 @@ C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-wi
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\FBrowser.deps.json
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\FBrowser.runtimeconfig.json
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\FBrowser.pdb
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\WebView2Loader.dll
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\Microsoft.Web.WebView2.Core.dll
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\Microsoft.Web.WebView2.WinForms.dll
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\Microsoft.Web.WebView2.Wpf.dll
-C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\WebView2Loader.dll
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\Microsoft.Web.WebView2.Core.xml
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\Microsoft.Web.WebView2.Wpf.xml
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\app.publish\Microsoft.Web.WebView2.WinForms.xml

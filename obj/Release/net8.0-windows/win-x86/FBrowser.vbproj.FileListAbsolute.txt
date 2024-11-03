@@ -29,3 +29,41 @@ C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-wi
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.pdb
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-windows\win-x86\ref\FBrowser.dll
 C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.About.resources
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.Core.xml
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.Wpf.xml
+C:\Users\alex.fare\OneDrive\!Projects\VisualBasic\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.WinForms.xml
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.vbproj.AssemblyReference.cache
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.BookmarkForm.resources
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.About.resources
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.Browser.resources
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.HistoryForm.resources
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.Resources.resources
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.vbproj.GenerateResource.cache
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.GeneratedMSBuildEditorConfig.editorconfig
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.AssemblyInfoInputs.cache
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.AssemblyInfo.vb
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.vbproj.CoreCompileInputs.cache
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.dll
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\refint\FBrowser.dll
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.pdb
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\FBrowser.deps.json
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\FBrowser.runtimeconfig.json
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\runtimes\win-x86\native\WebView2Loader.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\FBrowser.exe
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\FBrowser.dll.config
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\FBrowser.dll.manifest
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\FBrowser.application
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\FBrowser.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\FBrowser.pdb
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\WebView2Loader.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.Core.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.WinForms.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.Wpf.dll
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.Core.xml
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.WinForms.xml
+D:\Visual Studio\FBrowser\bin\Release\net8.0-windows\win-x86\Microsoft.Web.WebView2.Wpf.xml
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.genruntimeconfig.cache
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.dll.manifest
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.application
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\FBrowser.vbproj.Up2Date
+D:\Visual Studio\FBrowser\obj\Release\net8.0-windows\win-x86\ref\FBrowser.dll

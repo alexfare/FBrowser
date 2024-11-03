@@ -19,11 +19,11 @@ Imports System.Reflection
  Assembly: System.Reflection.AssemblyDescriptionAttribute("Fbrowser is fast and lightweight, running on Chromium/Edge WebView2. Get a fully "& _ 
     "functioning browsing experience, backed by the security and performance of the C"& _ 
     "hromium engine."),  _
- Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0"),  _
+ Assembly: System.Reflection.AssemblyFileVersionAttribute("1.3.2.9"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.3.0.6"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("FBrowser"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("FBrowser"),  _
- Assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0"),  _
+ Assembly: System.Reflection.AssemblyVersionAttribute("1.3.2.9"),  _
  Assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/alexfare/FBrowser"),  _
  Assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0"),  _
  Assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")> 
