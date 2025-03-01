@@ -51,7 +51,6 @@ Public Class Browser
         End If
     End Sub
 
-    'Highlight the text when TxtURL receives focus
     Private Sub TxtURL_Enter(sender As Object, e As EventArgs) Handles TxtURL.Enter
         TxtURL.SelectAll()
     End Sub
@@ -97,7 +96,7 @@ Public Class Browser
         Return Nothing
     End Function
 
-    Private Async Function AddNewTab(Optional url As String = "") As Task
+    Public Async Function AddNewTab(Optional url As String = "") As Task
         Dim newTab As New TabPage("New Tab")
 
         Dim navPanel As New Panel With {
@@ -340,7 +339,7 @@ Public Class Browser
     End Sub
 
     Private Sub ViewHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ViewHistoryToolStripMenuItem1.Click
-        Dim historyForm As New HistoryForm()
+        Dim historyForm As New HistoryForm(Me)
         historyForm.Show()
     End Sub
 
@@ -369,7 +368,19 @@ Public Class Browser
         About.Show()
     End Sub
 
-    Private Sub DeleteCacheToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteCacheToolStripMenuItem.Click
-        MessageBox.Show("Coming Soon.")
+    Private Async Sub DeleteCacheToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteCacheToolStripMenuItem.Click
+        Await WebView2.EnsureCoreWebView2Async()
+
+        ' Clear cache and other browsing data
+        Await WebView2.CoreWebView2.Profile.ClearBrowsingDataAsync()
+        Console.WriteLine("WebView2 cache cleared.")
+    End Sub
+
+    Private Sub DeveloperToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeveloperToolsToolStripMenuItem.Click
+        WebView2.CoreWebView2.OpenDevToolsWindow()
+    End Sub
+
+    Private Sub ClearHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClearHistoryToolStripMenuItem1.Click
+        BrowserHistoryManager.ClearHistory()
     End Sub
 End Class

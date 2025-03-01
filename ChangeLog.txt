@@ -4,6 +4,10 @@ Settings Page
 Cache Info
 Display Favicon
 
+v1.3.6.13
+Updates to Cache clearing and History clearing.
+Added Developer Tool viewer.
+
 v1.3.5.12
 Update WebView - v1.0.3065.39
 Added Version to title.

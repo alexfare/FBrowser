@@ -1,4 +1,6 @@
 ﻿Imports System.IO
+Imports System.Diagnostics
+Imports System.Threading
 
 Public Class BrowserHistoryManager
     Private Shared historyFilePath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp\FBrowser\history.csv")
@@ -51,4 +53,7 @@ Public Class BrowserHistoryManager
         EnsureDirectoryAndFileExist()
         File.WriteAllText(historyFilePath, String.Empty) 'Clear the file
     End Sub
+
+
+
 End Class
