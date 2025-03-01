@@ -1,12 +1,19 @@
 Todo:
-Change starting page - Completed
 Bookmarks
 Settings Page
 Cache Info
-Download Manager - Completed
-Fix Tabs - Completed
 Display Favicon
-History Page - Completed
+
+v1.3.5.12
+Update WebView - v1.0.3065.39
+Added Version to title.
+Update certificate.
+
+v1.3.4.11
+Update WebView - v1.0.2957.106
+
+v1.3.3.10
+Update WebView - v1.0.2903.40
 
 v1.3.2.9
 Updated About Page.

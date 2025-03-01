@@ -22,6 +22,10 @@ Public Class Browser
         If textBoxUrl IsNot Nothing Then
             textBoxUrl.Focus()
         End If
+
+        'get version
+        Dim getVersion As String = My.Settings.Version
+        Me.Text = "FBrowser - " + getVersion
     End Sub
 
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click

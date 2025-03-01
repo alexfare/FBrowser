@@ -12,14 +12,14 @@
     <PackageIcon>FBrowser_Logo.ico</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/alexfare/FBrowser</RepositoryUrl>
-    <Copyright>AlexFare 2024</Copyright>
+    <Copyright>AlexFare 2024 - 2025</Copyright>
     <Company>Fare</Company>
     <Authors>Alex Fare</Authors>
     <Title>FBrowser</Title>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
-    <Version>1.3.0.6</Version>
-    <AssemblyVersion>1.3.2.9</AssemblyVersion>
-    <FileVersion>1.3.2.9</FileVersion>
+    <Version>1.3.5.12</Version>
+    <AssemblyVersion>1.3.5.12</AssemblyVersion>
+    <FileVersion>1.3.5.12</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2849.39" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3065.39" />
   </ItemGroup>
 
   <ItemGroup>
