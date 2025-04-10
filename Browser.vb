@@ -5,27 +5,65 @@ Public Class Browser
     Private historyList As New List(Of HistoryItem)
 
     Private Async Sub Browser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' === Load History and Clear Tabs ===
         historyList = BrowserHistoryManager.LoadHistory()
         TabControl1.TabPages.Clear()
-        Await AddNewTab("https://alexfare.com") 'Allow user to change this in the future
 
-        'Set the tab size and draw mode
-        TabControl1.DrawMode = TabDrawMode.OwnerDrawFixed
-        TabControl1.ItemSize = New Size(145, 25) ' Set a fixed size for tabs
+        ' === Add First Tab ===
+        Await AddNewTab("https://alexfare.com") ' TODO: Make homepage user-configurable
+
+        ' === Configure TabControl Appearance ===
+        With TabControl1
+            .DrawMode = TabDrawMode.OwnerDrawFixed
+            .ItemSize = New Size(145, 25)
+            .Appearance = TabAppearance.Normal
+            .SizeMode = TabSizeMode.Fixed
+            .BackColor = Color.FromArgb(30, 30, 30)
+            .Padding = New Point(10, 3)
+        End With
         AddHandler TabControl1.DrawItem, AddressOf TabControl1_DrawItem
 
+        ' === Initialize Default WebView2 Instance ===
         InitializeAsync()
 
-        'Set focus to the URL TextBox of the current tab
+        ' === Set Focus to URL TextBox ===
         Dim currentTab = TabControl1.SelectedTab
-        Dim textBoxUrl = CType(currentTab.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
-        If textBoxUrl IsNot Nothing Then
-            textBoxUrl.Focus()
-        End If
+        Dim textBoxUrl = TryCast(currentTab?.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
+        textBoxUrl?.Focus()
 
-        'get version
-        Dim getVersion As String = My.Settings.Version
-        Me.Text = "FBrowser - " + getVersion
+        ' === Set Window Title with Version Info ===
+        Me.Text = $"FBrowser - {My.Settings.Version}"
+
+        ' === Apply Layout Settings (Docking, Padding, etc) ===
+        SetupLayout()
+    End Sub
+
+    Private Sub SetupLayout()
+        ' Dark theme for MenuStrip
+        MenuStrip1.BackColor = Color.FromArgb(30, 30, 30)
+        MenuStrip1.ForeColor = Color.White
+        For Each item As ToolStripMenuItem In MenuStrip1.Items
+            item.ForeColor = Color.White
+            item.BackColor = Color.FromArgb(30, 30, 30)
+        Next
+
+        ' TabControl color fix
+        TabControl1.BackColor = Color.FromArgb(40, 40, 40)
+        TabControl1.ForeColor = Color.White
+        TabControl1.Appearance = TabAppearance.FlatButtons
+        TabControl1.ItemSize = New Size(180, 30)
+        TabControl1.SizeMode = TabSizeMode.Fixed
+        TabControl1.DrawMode = TabDrawMode.OwnerDrawFixed
+
+        With TabControl1
+            .Appearance = TabAppearance.Normal
+            .DrawMode = TabDrawMode.OwnerDrawFixed
+            .BackColor = Color.FromArgb(30, 30, 30)
+            .ItemSize = New Size(180, 30)
+            .SizeMode = TabSizeMode.Fixed
+            .Padding = New Point(10, 3)
+        End With
+
     End Sub
 
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
@@ -98,112 +136,78 @@ Public Class Browser
 
     Public Async Function AddNewTab(Optional url As String = "") As Task
         Dim newTab As New TabPage("New Tab")
+        newTab.BackColor = Color.FromArgb(20, 20, 20)
 
         Dim navPanel As New Panel With {
-            .Dock = DockStyle.Top,
-            .Height = 30
-        }
+        .Dock = DockStyle.Top,
+        .Height = 45,
+        .BackColor = Color.FromArgb(30, 30, 30)
+    }
 
-        Dim btnBack As New Button With {.Text = "Back", .Width = 60, .Left = 10}
-        Dim btnRefresh As New Button With {.Text = "Refresh", .Width = 60, .Left = 80}
-        Dim btnForward As New Button With {.Text = "Forward", .Width = 60, .Left = 150}
-        Dim btnGo As New Button With {.Text = "Go", .Width = 60, .Anchor = AnchorStyles.Top Or AnchorStyles.Right}
-        Dim initialLeftPosition As Integer = 220
-        Dim rightPadding As Integer = 10
-        Dim textBoxUrlWidth As Integer = navPanel.Width - (initialLeftPosition + btnGo.Width + rightPadding)
+        Dim btnBack As New Button With {.Text = "←", .Width = 40, .Left = 10, .Top = 7, .FlatStyle = FlatStyle.Flat, .ForeColor = Color.White, .BackColor = Color.FromArgb(60, 60, 60)}
+        Dim btnForward As New Button With {.Text = "→", .Width = 40, .Left = 60, .Top = 7, .FlatStyle = FlatStyle.Flat, .ForeColor = Color.White, .BackColor = Color.FromArgb(60, 60, 60)}
+        Dim btnRefresh As New Button With {.Text = "⟳", .Width = 40, .Left = 110, .Top = 7, .FlatStyle = FlatStyle.Flat, .ForeColor = Color.White, .BackColor = Color.FromArgb(60, 60, 60)}
+        Dim textBoxUrl As New TextBox With {.Left = 160, .Top = 10, .Width = 500, .Height = 25, .Name = "textBoxUrl", .BackColor = Color.FromArgb(45, 45, 45), .ForeColor = Color.White, .BorderStyle = BorderStyle.FixedSingle}
+        Dim btnGo As New Button With {.Text = "Go", .Left = 670, .Top = 7, .Width = 60, .BackColor = Color.FromArgb(66, 133, 244), .ForeColor = Color.White, .FlatStyle = FlatStyle.Flat}
 
-        Dim textBoxUrl As New TextBox With {.Left = initialLeftPosition, .Name = "textBoxUrl", .Width = textBoxUrlWidth, .Anchor = AnchorStyles.Left Or AnchorStyles.Right}
+        ' Remove button borders
+        For Each btn In {btnBack, btnForward, btnRefresh, btnGo}
+            btn.FlatAppearance.BorderSize = 0
+        Next
 
-        btnGo.Left = textBoxUrl.Left + textBoxUrl.Width + 10
+        navPanel.Controls.AddRange({btnBack, btnForward, btnRefresh, textBoxUrl, btnGo})
 
-        navPanel.Controls.Add(btnBack)
-        navPanel.Controls.Add(btnRefresh)
-        navPanel.Controls.Add(btnForward)
-        navPanel.Controls.Add(textBoxUrl)
-        navPanel.Controls.Add(btnGo)
+        Dim webView As New WebView2 With {
+        .Name = "WebView2",
+        .Dock = DockStyle.Fill
+    }
 
-        Dim newWebView As New Microsoft.Web.WebView2.WinForms.WebView2 With {
-            .Name = "WebView2",
-            .Dock = DockStyle.Fill
-        }
-
-        newTab.Controls.Add(newWebView)
+        newTab.Controls.Add(webView)
         newTab.Controls.Add(navPanel)
 
         TabControl1.TabPages.Add(newTab)
         TabControl1.SelectedTab = newTab
 
-        AddHandler btnBack.Click, Sub(sender, e)
-                                      If newWebView.CoreWebView2 IsNot Nothing Then
-                                          newWebView.CoreWebView2.GoBack()
-                                      End If
-                                  End Sub
-
-        AddHandler btnRefresh.Click, Sub(sender, e)
-                                         If newWebView.CoreWebView2 IsNot Nothing Then
-                                             newWebView.CoreWebView2.Reload()
-                                         End If
-                                     End Sub
-
-        AddHandler btnForward.Click, Sub(sender, e)
-                                         If newWebView.CoreWebView2 IsNot Nothing Then
-                                             newWebView.CoreWebView2.GoForward()
-                                         End If
-                                     End Sub
-
-        AddHandler btnGo.Click, Sub(sender, e)
-                                    If newWebView.CoreWebView2 IsNot Nothing Then
-                                        NavigateToUrl(newWebView, textBoxUrl.Text)
-                                    End If
-                                End Sub
-
+        ' Event handlers
+        AddHandler btnBack.Click, Sub() If webView.CoreWebView2 IsNot Nothing Then webView.CoreWebView2.GoBack()
+        AddHandler btnForward.Click, Sub() If webView.CoreWebView2 IsNot Nothing Then webView.CoreWebView2.GoForward()
+        AddHandler btnRefresh.Click, Sub() If webView.CoreWebView2 IsNot Nothing Then webView.CoreWebView2.Reload()
+        AddHandler btnGo.Click, Sub() If webView.CoreWebView2 IsNot Nothing Then NavigateToUrl(webView, textBoxUrl.Text)
         AddHandler textBoxUrl.KeyPress, Sub(sender, e)
                                             If e.KeyChar = Convert.ToChar(Keys.Enter) Then
                                                 e.Handled = True
-                                                If newWebView.CoreWebView2 IsNot Nothing Then
-                                                    NavigateToUrl(newWebView, textBoxUrl.Text)
+                                                If webView.CoreWebView2 IsNot Nothing Then
+                                                    NavigateToUrl(webView, textBoxUrl.Text)
                                                 End If
                                             End If
                                         End Sub
 
-        AddHandler newWebView.CoreWebView2InitializationCompleted, Sub(sender, args)
-                                                                       If args.IsSuccess Then
-                                                                           AddHandler newWebView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
-                                                                           If Not String.IsNullOrEmpty(url) Then
-                                                                               NavigateToUrl(newWebView, url)
-                                                                               UpdateTabText(newTab, url)
-                                                                           End If
-                                                                       End If
-                                                                   End Sub
+        AddHandler webView.NavigationStarting, Sub(sender, e) UpdateUrlTextBox(newTab, e.Uri)
+        AddHandler webView.NavigationCompleted, Sub(sender, e)
+                                                    UpdateUrlTextBox(newTab, webView.Source.ToString())
+                                                    OnNavigationCompleted(webView, e)
+                                                End Sub
 
-        AddHandler newWebView.NavigationStarting, Sub(sender, e)
-                                                      UpdateUrlTextBox(newTab, e.Uri)
-                                                  End Sub
-        AddHandler newWebView.NavigationCompleted, Sub(sender, e)
-                                                       UpdateUrlTextBox(newTab, newWebView.Source.ToString())
-                                                       OnNavigationCompleted(newWebView, e)
-                                                   End Sub
-        AddHandler newWebView.CoreWebView2InitializationCompleted, Sub(sender, args)
-                                                                       If args.IsSuccess Then
-                                                                           AddHandler newWebView.CoreWebView2.DocumentTitleChanged, Sub()
-                                                                                                                                        UpdateTabTitle(newTab, newWebView.CoreWebView2.DocumentTitle)
-                                                                                                                                    End Sub
-                                                                       End If
-                                                                   End Sub
+        AddHandler webView.CoreWebView2InitializationCompleted, Sub(sender, args)
+                                                                    If args.IsSuccess Then
+                                                                        AddHandler webView.CoreWebView2.DocumentTitleChanged,
+                                                                        Sub() UpdateTabTitle(newTab, webView.CoreWebView2.DocumentTitle)
+                                                                        If Not String.IsNullOrEmpty(url) Then
+                                                                            NavigateToUrl(webView, url)
+                                                                            UpdateTabText(newTab, url)
+                                                                        End If
+                                                                    End If
+                                                                End Sub
 
         Try
-            Await newWebView.EnsureCoreWebView2Async(Nothing)
+            Await webView.EnsureCoreWebView2Async(Nothing)
         Catch ex As Exception
-            MessageBox.Show("Failed to initialize WebView2 runtime.", "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Failed to initialize WebView2.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
         textBoxUrl.Focus()
-
-        AddHandler navPanel.Resize, Sub(sender, e)
-                                        textBoxUrl.Width = navPanel.Width - (initialLeftPosition + btnGo.Width + rightPadding + 10)
-                                        btnGo.Left = textBoxUrl.Left + textBoxUrl.Width + 10
-                                    End Sub
     End Function
+
 
     Private Sub NavigateToUrl(webView As Microsoft.Web.WebView2.WinForms.WebView2, url As String)
         Try
@@ -263,25 +267,88 @@ Public Class Browser
         Return host
     End Function
 
+    Public Class DoubleBufferedTabControl
+        Inherits TabControl
+
+        Public Sub New()
+            Me.SetStyle(ControlStyles.UserPaint Or
+                    ControlStyles.AllPaintingInWmPaint Or
+                    ControlStyles.OptimizedDoubleBuffer Or
+                    ControlStyles.ResizeRedraw, True)
+            Me.DoubleBuffered = True
+        End Sub
+
+        Protected Overrides Sub OnPaintBackground(e As PaintEventArgs)
+            ' Prevent default background painting
+            ' Do nothing — we already draw the background in DrawItem
+        End Sub
+    End Class
+
     Private Sub TabControl1_DrawItem(sender As Object, e As DrawItemEventArgs)
-        Dim tabPage = TabControl1.TabPages(e.Index)
-        Dim tabRect = TabControl1.GetTabRect(e.Index)
-        Dim closeButtonSize = 10
-        Dim closeButtonPadding = 7 'Adjust the padding to ensure space between text and button
+        Dim tabControl = CType(sender, TabControl)
+        Dim g = e.Graphics
+        g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
-        Dim closeButtonX = tabRect.Right - closeButtonSize - closeButtonPadding
-        Dim closeButtonRect = New Rectangle(closeButtonX, tabRect.Top + (tabRect.Height - closeButtonSize) / 2, closeButtonSize, closeButtonSize)
+        ' Paint the entire tab strip background
+        Using bgBrush As New SolidBrush(Color.FromArgb(30, 30, 30))
+            g.FillRectangle(bgBrush, tabControl.GetTabRect(e.Index))
+        End Using
 
-        Dim textHeight = TextRenderer.MeasureText(tabPage.Text, tabPage.Font).Height
-        Dim textY = tabRect.Top + (tabRect.Height - textHeight) / 2
+        Dim tabPage = tabControl.TabPages(e.Index)
+        Dim tabRect = tabControl.GetTabRect(e.Index)
+        Dim isSelected = (e.Index = tabControl.SelectedIndex)
 
-        Dim textRect = New Rectangle(tabRect.X + closeButtonPadding, textY, tabRect.Width - closeButtonSize - closeButtonPadding * 2, tabRect.Height)
-        TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, textRect, tabPage.ForeColor, TextFormatFlags.Left)
+        ' Styling
+        Dim bgColor = If(isSelected, Color.FromArgb(50, 50, 50), Color.FromArgb(30, 30, 30))
+        Dim textColor = Color.White
+        Dim closeButtonColor = Color.FromArgb(80, 80, 80)
 
-        e.Graphics.DrawRectangle(Pens.Black, closeButtonRect)
-        e.Graphics.DrawLine(Pens.Black, closeButtonRect.Left, closeButtonRect.Top, closeButtonRect.Right, closeButtonRect.Bottom)
-        e.Graphics.DrawLine(Pens.Black, closeButtonRect.Right, closeButtonRect.Top, closeButtonRect.Left, closeButtonRect.Bottom)
+        ' Tab background
+        Using b As New SolidBrush(bgColor)
+            g.FillRectangle(b, tabRect)
+        End Using
+
+        ' Tab text
+        Dim font = New Font("Segoe UI", 9, FontStyle.Bold)
+        Dim padding = 12
+        Dim closeButtonSize = 14
+        Dim closePadding = 6
+
+        Dim textWidth = tabRect.Width - closeButtonSize - padding * 2
+        Dim textRect = New Rectangle(tabRect.X + padding, tabRect.Y + 6, textWidth, tabRect.Height - 6)
+
+        TextRenderer.DrawText(g, tabPage.Text.Trim(), font, textRect, textColor, TextFormatFlags.Left Or TextFormatFlags.VerticalCenter)
+
+        ' Close button
+        Dim closeX = tabRect.Right - closeButtonSize - closePadding
+        Dim closeY = tabRect.Top + (tabRect.Height - closeButtonSize) \ 2
+        Dim closeRect = New Rectangle(closeX, closeY, closeButtonSize, closeButtonSize)
+
+        Using path As Drawing2D.GraphicsPath = RoundedRect(closeRect, 4)
+            Using b As New SolidBrush(closeButtonColor)
+                g.FillPath(b, path)
+            End Using
+        End Using
+
+        Using pen As New Pen(Color.White, 1.5)
+            g.DrawLine(pen, closeRect.Left + 4, closeRect.Top + 4, closeRect.Right - 4, closeRect.Bottom - 4)
+            g.DrawLine(pen, closeRect.Right - 4, closeRect.Top + 4, closeRect.Left + 4, closeRect.Bottom - 4)
+        End Using
     End Sub
+
+
+    ' Helper function for rounded rectangles
+    Private Function RoundedRect(rect As Rectangle, radius As Integer) As Drawing2D.GraphicsPath
+        Dim path As New Drawing2D.GraphicsPath()
+        path.AddArc(rect.Left, rect.Top, radius, radius, 180, 90)
+        path.AddArc(rect.Right - radius, rect.Top, radius, radius, 270, 90)
+        path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90)
+        path.AddArc(rect.Left, rect.Bottom - radius, radius, radius, 90, 90)
+        path.CloseFigure()
+        Return path
+    End Function
+
+
 
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
         Dim closeButtonSize = 10

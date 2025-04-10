@@ -4,6 +4,17 @@ Settings Page
 Cache Info
 Display Favicon
 
+v1.3.7.14
+Updated WebView - v1.0.3179.45
+Refactored Browser_Load for readability and structured initialization
+Redesigned TabControl with custom dark-themed DrawItem logic
+Updated tab close buttons with rounded styling
+Eliminated flickering using a double-buffered custom TabControl class
+Themed the entire TabControl area to match the dark UI
+Cleaned up visual inconsistencies between tab, menu, and URL bar sections
+Removed redundant UI updates from inside paint methods
+Verified functional styling of tabs, text, and close buttons under .NET 8
+
 v1.3.6.13
 Updates to Cache clearing and History clearing.
 Added Developer Tool viewer.
