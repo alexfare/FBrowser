@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Diagnostics
 Imports System.Threading
+Imports Microsoft.VisualBasic.FileIO
 
 Public Class BrowserHistoryManager
     Private Shared historyFilePath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp\FBrowser\history.csv")
@@ -21,7 +22,12 @@ Public Class BrowserHistoryManager
 
         Using writer As New StreamWriter(historyFilePath, False)
             For Each item In historyList
-                writer.WriteLine($"{item.VisitDate},{item.Title},{item.URL}")
+                Dim fields = {
+                    EscapeCsvField(item.VisitDate.ToString("o")),
+                    EscapeCsvField(item.Title),
+                    EscapeCsvField(item.URL)
+                }
+                writer.WriteLine(String.Join(",", fields))
             Next
         End Using
     End Sub
@@ -31,16 +37,16 @@ Public Class BrowserHistoryManager
 
         Dim historyList As New List(Of HistoryItem)
 
-        Using reader As New StreamReader(historyFilePath)
-            While Not reader.EndOfStream
-                Dim line As String = reader.ReadLine()
-                If Not String.IsNullOrEmpty(line) Then
-                    Dim data() As String = line.Split(","c)
-                    If data.Length = 3 Then
-                        Dim visitDate As DateTime
-                        If DateTime.TryParse(data(0), visitDate) Then
-                            historyList.Add(New HistoryItem(data(2), data(1), visitDate))
-                        End If
+        Using parser As New TextFieldParser(historyFilePath)
+            parser.SetDelimiters(",")
+            parser.HasFieldsEnclosedInQuotes = True
+
+            While Not parser.EndOfData
+                Dim data() As String = parser.ReadFields()
+                If data IsNot Nothing AndAlso data.Length = 3 Then
+                    Dim visitDate As DateTime
+                    If DateTime.TryParse(data(0), visitDate) Then
+                        historyList.Add(New HistoryItem(data(2), data(1), visitDate))
                     End If
                 End If
             End While
@@ -55,5 +61,13 @@ Public Class BrowserHistoryManager
     End Sub
 
 
+
+    Private Shared Function EscapeCsvField(value As String) As String
+        If value Is Nothing Then
+            value = String.Empty
+        End If
+
+        Return """" & value.Replace("""", """"") & """"
+    End Function
 
 End Class
