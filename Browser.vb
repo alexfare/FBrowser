@@ -437,12 +437,22 @@ Public Class Browser
         MessageBox.Show("Coming Soon.")
     End Sub
 
-    Private Sub ViewDownloadsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewDownloadsToolStripMenuItem.Click
-        If WebView2.CoreWebView2 IsNot Nothing Then
-            WebView2.CoreWebView2.OpenDefaultDownloadDialog()
-        Else
-            MessageBox.Show("WebView2 is not initialized.")
+    Private Async Sub ViewDownloadsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewDownloadsToolStripMenuItem.Click
+        Dim currentWebView = GetCurrentWebView()
+
+        If currentWebView Is Nothing Then
+            MessageBox.Show("There is no active tab available. Open a tab and try again.")
+            Return
         End If
+
+        Await currentWebView.EnsureCoreWebView2Async()
+
+        If currentWebView.CoreWebView2 Is Nothing Then
+            MessageBox.Show("The current tab is still initializing. Please wait a moment and try again.")
+            Return
+        End If
+
+        currentWebView.CoreWebView2.OpenDefaultDownloadDialog()
     End Sub
 
     Private Sub AboutToolStripMenuItem_Click_1(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
@@ -450,15 +460,41 @@ Public Class Browser
     End Sub
 
     Private Async Sub DeleteCacheToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteCacheToolStripMenuItem.Click
-        Await WebView2.EnsureCoreWebView2Async()
+        Dim currentWebView = GetCurrentWebView()
+
+        If currentWebView Is Nothing Then
+            MessageBox.Show("There is no active tab available. Open a tab and try again.")
+            Return
+        End If
+
+        Await currentWebView.EnsureCoreWebView2Async()
+
+        If currentWebView.CoreWebView2 Is Nothing Then
+            MessageBox.Show("The current tab is still initializing. Please wait a moment and try again.")
+            Return
+        End If
 
         ' Clear cache and other browsing data
-        Await WebView2.CoreWebView2.Profile.ClearBrowsingDataAsync()
+        Await currentWebView.CoreWebView2.Profile.ClearBrowsingDataAsync()
         Console.WriteLine("WebView2 cache cleared.")
     End Sub
 
-    Private Sub DeveloperToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeveloperToolsToolStripMenuItem.Click
-        WebView2.CoreWebView2.OpenDevToolsWindow()
+    Private Async Sub DeveloperToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeveloperToolsToolStripMenuItem.Click
+        Dim currentWebView = GetCurrentWebView()
+
+        If currentWebView Is Nothing Then
+            MessageBox.Show("There is no active tab available. Open a tab and try again.")
+            Return
+        End If
+
+        Await currentWebView.EnsureCoreWebView2Async()
+
+        If currentWebView.CoreWebView2 Is Nothing Then
+            MessageBox.Show("The current tab is still initializing. Please wait a moment and try again.")
+            Return
+        End If
+
+        currentWebView.CoreWebView2.OpenDevToolsWindow()
     End Sub
 
     Private Sub ClearHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClearHistoryToolStripMenuItem1.Click
