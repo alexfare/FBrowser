@@ -4,66 +4,73 @@ Imports Microsoft.Web.WebView2.WinForms
 Public Class Browser
     Private historyList As New List(Of HistoryItem)
 
+    Private ReadOnly PrimaryBackground As Color = Color.FromArgb(18, 18, 20)
+    Private ReadOnly SecondaryBackground As Color = Color.FromArgb(32, 32, 36)
+    Private ReadOnly ToolbarGradientStart As Color = Color.FromArgb(58, 58, 66)
+    Private ReadOnly ToolbarGradientEnd As Color = Color.FromArgb(34, 34, 38)
+    Private ReadOnly MutedButtonColor As Color = Color.FromArgb(48, 48, 54)
+    Private ReadOnly MutedButtonHover As Color = Color.FromArgb(70, 70, 78)
+    Private ReadOnly AccentColor As Color = Color.FromArgb(99, 102, 241)
+    Private ReadOnly AccentHoverColor As Color = Color.FromArgb(129, 140, 248)
+    Private ReadOnly ControlTextColor As Color = Color.WhiteSmoke
+
     Private Async Sub Browser_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' === Load History and Clear Tabs ===
         historyList = BrowserHistoryManager.LoadHistory()
         TabControl1.TabPages.Clear()
 
-        ' === Add First Tab ===
-        Await AddNewTab("https://alexfare.com") ' TODO: Make homepage user-configurable
-
-        ' === Configure TabControl Appearance ===
-        With TabControl1
-            .DrawMode = TabDrawMode.OwnerDrawFixed
-            .ItemSize = New Size(145, 25)
-            .Appearance = TabAppearance.Normal
-            .SizeMode = TabSizeMode.Fixed
-            .BackColor = Color.FromArgb(30, 30, 30)
-            .Padding = New Point(10, 3)
-        End With
+        SetupLayout()
         AddHandler TabControl1.DrawItem, AddressOf TabControl1_DrawItem
 
-        ' === Initialize Default WebView2 Instance ===
+        Await AddNewTab("https://alexfare.com") ' TODO: Make homepage user-configurable
+
         InitializeAsync()
 
-        ' === Set Focus to URL TextBox ===
         Dim currentTab = TabControl1.SelectedTab
         Dim textBoxUrl = TryCast(currentTab?.Controls.Find("textBoxUrl", True).FirstOrDefault(), TextBox)
         textBoxUrl?.Focus()
 
-        ' === Set Window Title with Version Info ===
         Me.Text = $"FBrowser - {My.Settings.Version}"
-
-        ' === Apply Layout Settings (Docking, Padding, etc) ===
-        SetupLayout()
     End Sub
 
     Private Sub SetupLayout()
-        ' Dark theme for MenuStrip
-        MenuStrip1.BackColor = Color.FromArgb(30, 30, 30)
-        MenuStrip1.ForeColor = Color.White
-        For Each item As ToolStripMenuItem In MenuStrip1.Items
-            item.ForeColor = Color.White
-            item.BackColor = Color.FromArgb(30, 30, 30)
-        Next
+        BackColor = PrimaryBackground
+        DoubleBuffered = True
 
-        ' TabControl color fix
-        TabControl1.BackColor = Color.FromArgb(40, 40, 40)
-        TabControl1.ForeColor = Color.White
-        TabControl1.Appearance = TabAppearance.FlatButtons
-        TabControl1.ItemSize = New Size(180, 30)
-        TabControl1.SizeMode = TabSizeMode.Fixed
+        NavigationBar.GradientColor1 = ToolbarGradientStart
+        NavigationBar.GradientColor2 = ToolbarGradientEnd
+        NavigationBar.GradientMode = Drawing2D.LinearGradientMode.Horizontal
+
+        UrlContainer.BackColor = SecondaryBackground
+        UrlContainer.BorderColor = Color.FromArgb(72, 72, 78)
+        UrlContainer.BorderThickness = 1
+        UrlContainer.CornerRadius = 18
+
+        TxtURL.BackColor = SecondaryBackground
+        TxtURL.ForeColor = ControlTextColor
+        TxtURL.Font = New Font("Segoe UI", 11.0F, FontStyle.Regular)
+
+        LblBrand.ForeColor = ControlTextColor
+
+        StyleNavigationButton(BtnBack)
+        StyleNavigationButton(BtnForward)
+        StyleNavigationButton(BtnRefresh)
+        StyleNavigationButton(BtnGo, True)
+
+        TabControl1.BackColor = PrimaryBackground
+        TabControl1.ForeColor = ControlTextColor
+        TabControl1.Appearance = TabAppearance.Normal
         TabControl1.DrawMode = TabDrawMode.OwnerDrawFixed
+        TabControl1.ItemSize = New Size(190, 42)
+        TabControl1.SizeMode = TabSizeMode.Fixed
+        TabControl1.Padding = New Point(24, 6)
+        TabControl1.Font = New Font("Segoe UI Semibold", 10.0F, FontStyle.Regular)
 
-        With TabControl1
-            .Appearance = TabAppearance.Normal
-            .DrawMode = TabDrawMode.OwnerDrawFixed
-            .BackColor = Color.FromArgb(30, 30, 30)
-            .ItemSize = New Size(180, 30)
-            .SizeMode = TabSizeMode.Fixed
-            .Padding = New Point(10, 3)
-        End With
-
+        MenuStrip1.BackColor = SecondaryBackground
+        MenuStrip1.ForeColor = ControlTextColor
+        MenuStrip1.Font = New Font("Segoe UI", 10.0F, FontStyle.Regular)
+        MenuStrip1.RenderMode = ToolStripRenderMode.Professional
+        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New ModernColorTable(SecondaryBackground, AccentColor, PrimaryBackground))
+        StyleMenuItems()
     End Sub
 
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
@@ -135,71 +142,194 @@ Public Class Browser
     End Function
 
     Public Async Function AddNewTab(Optional url As String = "") As Task
-        Dim newTab As New TabPage("New Tab")
-        newTab.BackColor = Color.FromArgb(20, 20, 20)
+        Dim navHeight = If(NavigationBar IsNot Nothing AndAlso Not NavigationBar.IsDisposed AndAlso NavigationBar.Height > 0, NavigationBar.Height, 84)
+        Dim navPadding = If(NavigationBar IsNot Nothing AndAlso Not NavigationBar.IsDisposed, NavigationBar.Padding, New Padding(20, 14, 20, 14))
+        Dim navButtonSize = If(BtnBack IsNot Nothing AndAlso Not BtnBack.IsDisposed, BtnBack.Size, New Size(48, 56))
+        Dim navButtonFont = If(BtnBack IsNot Nothing AndAlso Not BtnBack.IsDisposed, BtnBack.Font, New Font("Segoe UI Symbol", 12.0F, FontStyle.Bold))
+        Dim navButtonForwardFont = If(BtnForward IsNot Nothing AndAlso Not BtnForward.IsDisposed, BtnForward.Font, navButtonFont)
+        Dim navButtonRefreshFont = If(BtnRefresh IsNot Nothing AndAlso Not BtnRefresh.IsDisposed, BtnRefresh.Font, navButtonFont)
+        Dim urlCorner = If(UrlContainer IsNot Nothing AndAlso Not UrlContainer.IsDisposed, UrlContainer.CornerRadius, 18)
+        Dim urlBorderColor = If(UrlContainer IsNot Nothing AndAlso Not UrlContainer.IsDisposed, UrlContainer.BorderColor, Color.FromArgb(72, 72, 78))
+        Dim urlBorderThickness = If(UrlContainer IsNot Nothing AndAlso Not UrlContainer.IsDisposed, UrlContainer.BorderThickness, 1)
+        Dim urlPadding = If(UrlContainer IsNot Nothing AndAlso Not UrlContainer.IsDisposed, UrlContainer.Padding, New Padding(18, 10, 18, 10))
+        Dim textFont = If(TxtURL IsNot Nothing AndAlso Not TxtURL.IsDisposed, TxtURL.Font, New Font("Segoe UI", 11.0F, FontStyle.Regular))
+        Dim goButtonFont = If(BtnGo IsNot Nothing AndAlso Not BtnGo.IsDisposed, BtnGo.Font, New Font("Segoe UI Semibold", 11.0F, FontStyle.Bold))
+        Dim goButtonSize = If(BtnGo IsNot Nothing AndAlso Not BtnGo.IsDisposed, BtnGo.Size, New Size(58, 56))
 
-        Dim navPanel As New Panel With {
-        .Dock = DockStyle.Top,
-        .Height = 45,
-        .BackColor = Color.FromArgb(30, 30, 30)
-    }
-
-        Dim btnBack As New Button With {.Text = "←", .Width = 40, .Left = 10, .Top = 7, .FlatStyle = FlatStyle.Flat, .ForeColor = Color.White, .BackColor = Color.FromArgb(60, 60, 60)}
-        Dim btnForward As New Button With {.Text = "→", .Width = 40, .Left = 60, .Top = 7, .FlatStyle = FlatStyle.Flat, .ForeColor = Color.White, .BackColor = Color.FromArgb(60, 60, 60)}
-        Dim btnRefresh As New Button With {.Text = "⟳", .Width = 40, .Left = 110, .Top = 7, .FlatStyle = FlatStyle.Flat, .ForeColor = Color.White, .BackColor = Color.FromArgb(60, 60, 60)}
-        Dim textBoxUrl As New TextBox With {.Left = 160, .Top = 10, .Width = 500, .Height = 25, .Name = "textBoxUrl", .BackColor = Color.FromArgb(45, 45, 45), .ForeColor = Color.White, .BorderStyle = BorderStyle.FixedSingle}
-        Dim btnGo As New Button With {.Text = "Go", .Left = 670, .Top = 7, .Width = 60, .BackColor = Color.FromArgb(66, 133, 244), .ForeColor = Color.White, .FlatStyle = FlatStyle.Flat}
-
-        ' Remove button borders
-        For Each btn In {btnBack, btnForward, btnRefresh, btnGo}
-            btn.FlatAppearance.BorderSize = 0
-        Next
-
-        navPanel.Controls.AddRange({btnBack, btnForward, btnRefresh, textBoxUrl, btnGo})
+        Dim newTab As New TabPage("New Tab") With {
+            .BackColor = PrimaryBackground,
+            .ForeColor = ControlTextColor,
+            .Padding = New Padding(0),
+            .Font = TabControl1.Font
+        }
 
         Dim webView As New WebView2 With {
-        .Name = "WebView2",
-        .Dock = DockStyle.Fill
-    }
+            .Name = "WebView2",
+            .Dock = DockStyle.Fill,
+            .DefaultBackgroundColor = PrimaryBackground
+        }
+
+        Dim navBar As New GradientPanel With {
+            .Dock = DockStyle.Top,
+            .Height = navHeight,
+            .GradientColor1 = ToolbarGradientStart,
+            .GradientColor2 = ToolbarGradientEnd,
+            .GradientMode = Drawing2D.LinearGradientMode.Horizontal,
+            .Padding = navPadding
+        }
+
+        Dim navLayout As New TableLayoutPanel With {
+            .ColumnCount = 5,
+            .Dock = DockStyle.Fill,
+            .Margin = New Padding(0),
+            .RowCount = 1,
+            .GrowStyle = TableLayoutPanelGrowStyle.FixedSize
+        }
+        navLayout.ColumnStyles.Add(New ColumnStyle())
+        navLayout.ColumnStyles.Add(New ColumnStyle())
+        navLayout.ColumnStyles.Add(New ColumnStyle())
+        navLayout.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100.0F))
+        navLayout.ColumnStyles.Add(New ColumnStyle())
+        navLayout.RowStyles.Add(New RowStyle(SizeType.Percent, 100.0F))
+
+        Dim btnBack As New Button With {
+            .Text = "←",
+            .Font = navButtonFont,
+            .Margin = New Padding(0, 0, 10, 0),
+            .Size = navButtonSize,
+            .Anchor = AnchorStyles.None
+        }
+        btnBack.MinimumSize = btnBack.Size
+
+        Dim btnForward As New Button With {
+            .Text = "→",
+            .Font = navButtonForwardFont,
+            .Margin = New Padding(0, 0, 10, 0),
+            .Size = navButtonSize,
+            .Anchor = AnchorStyles.None
+        }
+        btnForward.MinimumSize = btnForward.Size
+
+        Dim btnRefresh As New Button With {
+            .Text = "⟳",
+            .Font = navButtonRefreshFont,
+            .Margin = New Padding(0, 0, 16, 0),
+            .Size = navButtonSize,
+            .Anchor = AnchorStyles.None
+        }
+        btnRefresh.MinimumSize = btnRefresh.Size
+
+        Dim urlContainer As New RoundedPanel With {
+            .CornerRadius = urlCorner,
+            .BorderColor = urlBorderColor,
+            .BorderThickness = urlBorderThickness,
+            .BackColor = SecondaryBackground,
+            .Margin = New Padding(16, 0, 16, 0),
+            .Padding = urlPadding,
+            .Dock = DockStyle.Fill
+        }
+
+        Dim textBoxUrl As New TextBox With {
+            .Name = "textBoxUrl",
+            .BorderStyle = BorderStyle.None,
+            .BackColor = SecondaryBackground,
+            .ForeColor = ControlTextColor,
+            .Font = textFont,
+            .Dock = DockStyle.Fill,
+            .Margin = New Padding(0)
+        }
+        urlContainer.Controls.Add(textBoxUrl)
+
+        Dim btnGo As New Button With {
+            .Text = "Go",
+            .Font = goButtonFont,
+            .Margin = New Padding(0),
+            .Size = goButtonSize,
+            .Anchor = AnchorStyles.None
+        }
+        btnGo.MinimumSize = btnGo.Size
+
+        navLayout.Controls.Add(btnBack, 0, 0)
+        navLayout.Controls.Add(btnForward, 1, 0)
+        navLayout.Controls.Add(btnRefresh, 2, 0)
+        navLayout.Controls.Add(urlContainer, 3, 0)
+        navLayout.Controls.Add(btnGo, 4, 0)
+
+        navBar.Controls.Add(navLayout)
 
         newTab.Controls.Add(webView)
-        newTab.Controls.Add(navPanel)
+        newTab.Controls.Add(navBar)
+        navBar.BringToFront()
 
         TabControl1.TabPages.Add(newTab)
         TabControl1.SelectedTab = newTab
 
-        ' Event handlers
-        AddHandler btnBack.Click, Sub() If webView.CoreWebView2 IsNot Nothing Then webView.CoreWebView2.GoBack()
-        AddHandler btnForward.Click, Sub() If webView.CoreWebView2 IsNot Nothing Then webView.CoreWebView2.GoForward()
-        AddHandler btnRefresh.Click, Sub() If webView.CoreWebView2 IsNot Nothing Then webView.CoreWebView2.Reload()
-        AddHandler btnGo.Click, Sub() If webView.CoreWebView2 IsNot Nothing Then NavigateToUrl(webView, textBoxUrl.Text)
-        AddHandler textBoxUrl.KeyPress, Sub(sender, e)
-                                            If e.KeyChar = Convert.ToChar(Keys.Enter) Then
-                                                e.Handled = True
-                                                If webView.CoreWebView2 IsNot Nothing Then
-                                                    NavigateToUrl(webView, textBoxUrl.Text)
-                                                End If
-                                            End If
-                                        End Sub
+        StyleNavigationButton(btnBack)
+        StyleNavigationButton(btnForward)
+        StyleNavigationButton(btnRefresh)
+        StyleNavigationButton(btnGo, True)
+
+        AddHandler btnBack.Click,
+            Sub()
+                If webView.CoreWebView2 IsNot Nothing Then
+                    webView.CoreWebView2.GoBack()
+                End If
+            End Sub
+
+        AddHandler btnForward.Click,
+            Sub()
+                If webView.CoreWebView2 IsNot Nothing Then
+                    webView.CoreWebView2.GoForward()
+                End If
+            End Sub
+
+        AddHandler btnRefresh.Click,
+            Sub()
+                If webView.CoreWebView2 IsNot Nothing Then
+                    webView.CoreWebView2.Reload()
+                End If
+            End Sub
+
+        AddHandler btnGo.Click,
+            Sub()
+                If webView.CoreWebView2 IsNot Nothing Then
+                    NavigateToUrl(webView, textBoxUrl.Text)
+                End If
+            End Sub
+
+        AddHandler textBoxUrl.KeyPress,
+            Sub(sender, e)
+                If e.KeyChar = Convert.ToChar(Keys.Enter) Then
+                    e.Handled = True
+                    If webView.CoreWebView2 Is Not Nothing Then
+                        NavigateToUrl(webView, textBoxUrl.Text)
+                    End If
+                End If
+            End Sub
 
         AddHandler webView.NavigationStarting, Sub(sender, e) UpdateUrlTextBox(newTab, e.Uri)
-        AddHandler webView.NavigationCompleted, Sub(sender, e)
-                                                    UpdateUrlTextBox(newTab, webView.Source.ToString())
-                                                    OnNavigationCompleted(webView, e)
-                                                End Sub
+        AddHandler webView.NavigationCompleted,
+            Sub(sender, e)
+                UpdateUrlTextBox(newTab, webView.Source.ToString())
+                OnNavigationCompleted(webView, e)
+            End Sub
 
-        AddHandler webView.CoreWebView2InitializationCompleted, Sub(sender, args)
-                                                                    If args.IsSuccess Then
-                                                                        RemoveHandler webView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
-                                                                        AddHandler webView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
-                                                                        AddHandler webView.CoreWebView2.DocumentTitleChanged,
-                                                                        Sub() UpdateTabTitle(newTab, webView.CoreWebView2.DocumentTitle)
-                                                                        If Not String.IsNullOrEmpty(url) Then
-                                                                            NavigateToUrl(webView, url)
-                                                                            UpdateTabText(newTab, url)
-                                                                        End If
-                                                                    End If
-                                                                End Sub
+        AddHandler webView.CoreWebView2InitializationCompleted,
+            Sub(sender, args)
+                If args.IsSuccess Then
+                    RemoveHandler webView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
+                    AddHandler webView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
+                    AddHandler webView.CoreWebView2.DocumentTitleChanged,
+                        Sub()
+                            UpdateTabTitle(newTab, webView.CoreWebView2.DocumentTitle)
+                        End Sub
+
+                    If Not String.IsNullOrEmpty(url) Then
+                        NavigateToUrl(webView, url)
+                        UpdateTabText(newTab, url)
+                    End If
+                End If
+            End Sub
 
         Try
             Await webView.EnsureCoreWebView2Async(Nothing)
@@ -291,48 +421,48 @@ Public Class Browser
         Dim g = e.Graphics
         g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
-        ' Paint the entire tab strip background
-        Using bgBrush As New SolidBrush(Color.FromArgb(30, 30, 30))
-            g.FillRectangle(bgBrush, tabControl.GetTabRect(e.Index))
-        End Using
+        If e.Index = 0 Then
+            Using stripBrush As New SolidBrush(SecondaryBackground)
+                g.FillRectangle(stripBrush, New Rectangle(Point.Empty, New Size(tabControl.Width, tabControl.ItemSize.Height + 24)))
+            End Using
+        End If
 
-        Dim tabPage = tabControl.TabPages(e.Index)
         Dim tabRect = tabControl.GetTabRect(e.Index)
         Dim isSelected = (e.Index = tabControl.SelectedIndex)
+        Dim tabBounds = Rectangle.Inflate(tabRect, -6, -6)
 
-        ' Styling
-        Dim bgColor = If(isSelected, Color.FromArgb(50, 50, 50), Color.FromArgb(30, 30, 30))
-        Dim textColor = Color.White
-        Dim closeButtonColor = Color.FromArgb(80, 80, 80)
+        Using path = RoundedRect(tabBounds, 16)
+            If isSelected Then
+                Using brush As New Drawing2D.LinearGradientBrush(tabBounds, AccentColor, Lighten(AccentColor, 25), Drawing2D.LinearGradientMode.Vertical)
+                    g.FillPath(brush, path)
+                End Using
+            Else
+                Using brush As New SolidBrush(Color.FromArgb(48, 48, 58))
+                    g.FillPath(brush, path)
+                End Using
+            End If
 
-        ' Tab background
-        Using b As New SolidBrush(bgColor)
-            g.FillRectangle(b, tabRect)
-        End Using
-
-        ' Tab text
-        Dim font = New Font("Segoe UI", 9, FontStyle.Bold)
-        Dim padding = 12
-        Dim closeButtonSize = 14
-        Dim closePadding = 6
-
-        Dim textWidth = tabRect.Width - closeButtonSize - padding * 2
-        Dim textRect = New Rectangle(tabRect.X + padding, tabRect.Y + 6, textWidth, tabRect.Height - 6)
-
-        TextRenderer.DrawText(g, tabPage.Text.Trim(), font, textRect, textColor, TextFormatFlags.Left Or TextFormatFlags.VerticalCenter)
-
-        ' Close button
-        Dim closeX = tabRect.Right - closeButtonSize - closePadding
-        Dim closeY = tabRect.Top + (tabRect.Height - closeButtonSize) \ 2
-        Dim closeRect = New Rectangle(closeX, closeY, closeButtonSize, closeButtonSize)
-
-        Using path As Drawing2D.GraphicsPath = RoundedRect(closeRect, 4)
-            Using b As New SolidBrush(closeButtonColor)
-                g.FillPath(b, path)
+            Dim borderColor = If(isSelected, Color.FromArgb(180, AccentColor), Color.FromArgb(70, 70, 80))
+            Using borderPen As New Pen(borderColor, If(isSelected, 1.6F, 1.0F))
+                g.DrawPath(borderPen, path)
             End Using
         End Using
 
-        Using pen As New Pen(Color.White, 1.5)
+        Dim closeButtonSize = 16
+        Dim textRect = New Rectangle(tabBounds.X + 18, tabBounds.Y + 10, tabBounds.Width - closeButtonSize - 34, tabBounds.Height - 20)
+        Dim textColor = If(isSelected, Color.White, ControlTextColor)
+
+        TextRenderer.DrawText(g, tabControl.TabPages(e.Index).Text.Trim(), New Font("Segoe UI Semibold", 9.5F), textRect, textColor, TextFormatFlags.EndEllipsis)
+
+        Dim closeRect = New Rectangle(tabBounds.Right - closeButtonSize - 12, tabBounds.Top + (tabBounds.Height - closeButtonSize) \ 2, closeButtonSize, closeButtonSize)
+
+        Using closePath = RoundedRect(closeRect, 6)
+            Using closeBrush As New SolidBrush(If(isSelected, Color.FromArgb(230, Color.White), Color.FromArgb(110, 110, 120)))
+                g.FillPath(closeBrush, closePath)
+            End Using
+        End Using
+
+        Using pen As New Pen(If(isSelected, Color.FromArgb(70, 70, 80), Color.FromArgb(30, 30, 34)), 1.4F)
             g.DrawLine(pen, closeRect.Left + 4, closeRect.Top + 4, closeRect.Right - 4, closeRect.Bottom - 4)
             g.DrawLine(pen, closeRect.Right - 4, closeRect.Top + 4, closeRect.Left + 4, closeRect.Bottom - 4)
         End Using
@@ -350,14 +480,21 @@ Public Class Browser
         Return path
     End Function
 
+    Private Function Lighten(color As Color, amount As Integer) As Color
+        Dim r = Math.Min(255, color.R + amount)
+        Dim g = Math.Min(255, color.G + amount)
+        Dim b = Math.Min(255, color.B + amount)
+        Return Color.FromArgb(r, g, b)
+    End Function
+
 
 
     Private Sub TabControl1_MouseDown(sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
-        Dim closeButtonSize = 10
-        Dim closeButtonPadding = 7 'Adjust the padding to ensure space between text and button
+        Dim closeButtonSize = 16
+        Dim closeButtonPadding = 12
 
         For i As Integer = 0 To TabControl1.TabPages.Count - 1
-            Dim tabRect = TabControl1.GetTabRect(i)
+            Dim tabRect = Rectangle.Inflate(TabControl1.GetTabRect(i), -6, -6)
             Dim closeButtonX = tabRect.Right - closeButtonSize - closeButtonPadding
             Dim closeButtonRect = New Rectangle(closeButtonX, tabRect.Top + (tabRect.Height - closeButtonSize) / 2, closeButtonSize, closeButtonSize)
 
@@ -478,6 +615,140 @@ Public Class Browser
         Await currentWebView.CoreWebView2.Profile.ClearBrowsingDataAsync()
         Console.WriteLine("WebView2 cache cleared.")
     End Sub
+
+    Private Sub StyleNavigationButton(button As Button, Optional isAccent As Boolean = False)
+        Dim normalColor = If(isAccent, AccentColor, MutedButtonColor)
+        Dim hoverColor = If(isAccent, AccentHoverColor, MutedButtonHover)
+
+        button.FlatStyle = FlatStyle.Flat
+        button.FlatAppearance.BorderSize = 0
+        button.FlatAppearance.MouseOverBackColor = hoverColor
+        button.FlatAppearance.MouseDownBackColor = hoverColor
+        button.BackColor = normalColor
+        button.ForeColor = ControlTextColor
+        button.Cursor = Cursors.Hand
+
+        AttachHoverEffect(button, normalColor, hoverColor)
+    End Sub
+
+    Private Sub AttachHoverEffect(button As Button, normalColor As Color, hoverColor As Color)
+        AddHandler button.MouseEnter, Sub(sender, _) CType(sender, Button).BackColor = hoverColor
+        AddHandler button.MouseLeave, Sub(sender, _) CType(sender, Button).BackColor = normalColor
+    End Sub
+
+    Private Sub StyleMenuItems()
+        For Each item As ToolStripItem In MenuStrip1.Items
+            Dim menuItem = TryCast(item, ToolStripMenuItem)
+            If menuItem IsNot Nothing Then
+                menuItem.ForeColor = ControlTextColor
+                menuItem.BackColor = SecondaryBackground
+                menuItem.Font = New Font("Segoe UI Semibold", 10.0F, FontStyle.Bold)
+                menuItem.Margin = New Padding(4, 0, 4, 0)
+
+                Dim dropDown = TryCast(menuItem.DropDown, ToolStripDropDownMenu)
+                If dropDown IsNot Nothing Then
+                    dropDown.BackColor = PrimaryBackground
+                    dropDown.ForeColor = ControlTextColor
+                    dropDown.ShowImageMargin = False
+                End If
+
+                StyleDropDownMenuItems(menuItem.DropDownItems)
+            End If
+        Next
+    End Sub
+
+    Private Sub StyleDropDownMenuItems(items As ToolStripItemCollection)
+        For Each entry As ToolStripItem In items
+            If TypeOf entry Is ToolStripSeparator Then
+                Continue For
+            End If
+
+            entry.BackColor = PrimaryBackground
+            entry.ForeColor = ControlTextColor
+            entry.Font = New Font("Segoe UI", 9.75F, FontStyle.Regular)
+            entry.Padding = New Padding(12, 6, 12, 6)
+        Next
+    End Sub
+
+    Private Class ModernColorTable
+        Inherits ProfessionalColorTable
+
+        Private ReadOnly _menuBackColor As Color
+        Private ReadOnly _accentColor As Color
+        Private ReadOnly _dropDownBackColor As Color
+
+        Public Sub New(menuBackColor As Color, accentColor As Color, dropDownBackColor As Color)
+            _menuBackColor = menuBackColor
+            _accentColor = accentColor
+            _dropDownBackColor = dropDownBackColor
+        End Sub
+
+        Public Overrides ReadOnly Property ToolStripBorder As Color
+            Get
+                Return _menuBackColor
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemBorder As Color
+            Get
+                Return _accentColor
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelected As Color
+            Get
+                Return Color.FromArgb(80, _accentColor)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelectedGradientBegin As Color
+            Get
+                Return Color.FromArgb(100, _accentColor)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelectedGradientEnd As Color
+            Get
+                Return Color.FromArgb(60, _accentColor)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuStripGradientBegin As Color
+            Get
+                Return _menuBackColor
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuStripGradientEnd As Color
+            Get
+                Return _menuBackColor
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientBegin As Color
+            Get
+                Return _dropDownBackColor
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientMiddle As Color
+            Get
+                Return _dropDownBackColor
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientEnd As Color
+            Get
+                Return _dropDownBackColor
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedBorder As Color
+            Get
+                Return _accentColor
+            End Get
+        End Property
+    End Class
 
     Private Async Sub DeveloperToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeveloperToolsToolStripMenuItem.Click
         Dim currentWebView = GetCurrentWebView()
