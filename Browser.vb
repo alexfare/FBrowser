@@ -190,6 +190,8 @@ Public Class Browser
 
         AddHandler webView.CoreWebView2InitializationCompleted, Sub(sender, args)
                                                                     If args.IsSuccess Then
+                                                                        RemoveHandler webView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
+                                                                        AddHandler webView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
                                                                         AddHandler webView.CoreWebView2.DocumentTitleChanged,
                                                                         Sub() UpdateTabTitle(newTab, webView.CoreWebView2.DocumentTitle)
                                                                         If Not String.IsNullOrEmpty(url) Then
@@ -360,7 +362,15 @@ Public Class Browser
             Dim closeButtonRect = New Rectangle(closeButtonX, tabRect.Top + (tabRect.Height - closeButtonSize) / 2, closeButtonSize, closeButtonSize)
 
             If closeButtonRect.Contains(e.Location) Then
-                TabControl1.TabPages.RemoveAt(i)
+                Dim tabPage = TabControl1.TabPages(i)
+                Dim webView = TryCast(tabPage.Controls("WebView2"), Microsoft.Web.WebView2.WinForms.WebView2)
+                If webView IsNot Nothing Then
+                    If webView.CoreWebView2 IsNot Nothing Then
+                        RemoveHandler webView.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
+                    End If
+                    webView.Dispose()
+                End If
+                TabControl1.TabPages.Remove(tabPage)
                 Exit For
             End If
         Next
@@ -377,6 +387,10 @@ Public Class Browser
 
     Private Async Sub InitializeAsync()
         Await WebView2.EnsureCoreWebView2Async(Nothing)
+        If WebView2.CoreWebView2 IsNot Nothing Then
+            RemoveHandler WebView2.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
+            AddHandler WebView2.CoreWebView2.NewWindowRequested, AddressOf CoreWebView2_NewWindowRequested
+        End If
         AddHandler WebView2.NavigationCompleted, AddressOf OnNavigationCompleted
         WebView2.Source = New Uri("https://www.example.com")
     End Sub
