@@ -1,10 +1,10 @@
 Todo:
-Bookmarks
 Settings Page
 Cache Info
 Display Favicon
 
 v1.3.8.15
+Added Bookmarks menu and functionality.
 Fixed Clearing History.
 Update WebView - v1.0.3537.50
 
