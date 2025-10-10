@@ -34,10 +34,14 @@
     End Sub
 
     Public Sub ClearHistoryHandler()
-        ' Clear both the in-memory list and the CSV file
         historyList.Clear()
-        BrowserHistoryManager.ClearHistory()
         ListBox1.Items.Clear()
+
+        If browserInstance IsNot Nothing Then
+            browserInstance.ClearHistoryData()
+        Else
+            BrowserHistoryManager.ClearHistory()
+        End If
     End Sub
 
     Private Sub ListBox1_DoubleClick(sender As Object, e As EventArgs) Handles ListBox1.DoubleClick

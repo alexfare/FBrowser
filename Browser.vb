@@ -497,7 +497,12 @@ Public Class Browser
         currentWebView.CoreWebView2.OpenDevToolsWindow()
     End Sub
 
-    Private Sub ClearHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClearHistoryToolStripMenuItem1.Click
+    Public Sub ClearHistoryData()
+        historyList.Clear()
         BrowserHistoryManager.ClearHistory()
+    End Sub
+
+    Private Sub ClearHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClearHistoryToolStripMenuItem1.Click
+        ClearHistoryData()
     End Sub
 End Class
