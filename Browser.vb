@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Web.WebView2.Core
+﻿Imports Microsoft.VisualBasic
+Imports Microsoft.Web.WebView2.Core
 Imports Microsoft.Web.WebView2.WinForms
 
 Public Class Browser
@@ -376,14 +377,31 @@ Public Class Browser
         Next
     End Sub
 
-    Private Sub OnBookmarkClicked(url As String)
-        Dim currentWebView = GetCurrentWebView()
-        If currentWebView IsNot Nothing Then
-            currentWebView.CoreWebView2.Navigate(url)
-            UpdateUrlTextBox(TabControl1.SelectedTab, url)
-            UpdateTabText(TabControl1.SelectedTab, url)
+    Friend Async Function OpenBookmarkAsync(url As String, Optional openInNewTab As Boolean = False) As Task
+        If String.IsNullOrWhiteSpace(url) Then
+            Return
         End If
-    End Sub
+
+        If openInNewTab OrElse TabControl1.SelectedTab Is Nothing Then
+            Await AddNewTab(url)
+            Return
+        End If
+
+        Dim currentWebView = GetCurrentWebView()
+        If currentWebView Is Nothing Then
+            Await AddNewTab(url)
+            Return
+        End If
+
+        Await currentWebView.EnsureCoreWebView2Async(Nothing)
+        If currentWebView.CoreWebView2 Is Nothing Then
+            Return
+        End If
+
+        currentWebView.CoreWebView2.Navigate(url)
+        UpdateUrlTextBox(TabControl1.SelectedTab, url)
+        UpdateTabText(TabControl1.SelectedTab, url)
+    End Function
 
     Private Async Sub InitializeAsync()
         Await WebView2.EnsureCoreWebView2Async(Nothing)
@@ -426,33 +444,63 @@ Public Class Browser
 
 
     Private Sub ViewBookmarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewBookmarksToolStripMenuItem.Click
-        MessageBox.Show("Coming Soon.")
+        Dim bookmarkForm As New BookmarkForm(Me)
+        bookmarkForm.Show(Me)
     End Sub
 
-    Private Sub AddToBookmarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddToBookmarksToolStripMenuItem.Click
-        MessageBox.Show("Coming Soon.")
+    Private Async Sub AddToBookmarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddToBookmarksToolStripMenuItem.Click
+        Dim currentWebView = GetCurrentWebView()
+
+        If currentWebView Is Nothing Then
+            MessageBox.Show("There is no active tab available. Open a tab and try again.", "Bookmarks", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        Await currentWebView.EnsureCoreWebView2Async(Nothing)
+
+        If currentWebView.CoreWebView2 Is Nothing Then
+            MessageBox.Show("The current tab is still initializing. Please wait a moment and try again.", "Bookmarks", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        Dim sourceUri = currentWebView.Source
+        Dim url As String = If(sourceUri?.AbsoluteUri, String.Empty)
+
+        If String.IsNullOrWhiteSpace(url) Then
+            MessageBox.Show("Unable to determine the current page address.", "Bookmarks", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Dim title As String = currentWebView.CoreWebView2.DocumentTitle
+        If String.IsNullOrWhiteSpace(title) Then
+            title = url
+        End If
+
+        Dim bookmarkName = Interaction.InputBox("Enter a name for this bookmark:", "Add Bookmark", title)
+        If bookmarkName Is Nothing Then
+            Return
+        End If
+
+        bookmarkName = bookmarkName.Trim()
+        If bookmarkName.Length = 0 Then
+            MessageBox.Show("Bookmark name cannot be empty.", "Bookmarks", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        BookmarkManager.SaveBookmark(url, bookmarkName)
+        MessageBox.Show("Bookmark saved.", "Bookmarks", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     Private Sub ViewCacheToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewCacheToolStripMenuItem.Click
         MessageBox.Show("Coming Soon.")
     End Sub
 
-    Private Async Sub ViewDownloadsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewDownloadsToolStripMenuItem.Click
-        Dim currentWebView = GetCurrentWebView()
-
-        If currentWebView Is Nothing Then
-            MessageBox.Show("There is no active tab available. Open a tab and try again.")
-            Return
+    Private Sub ViewDownloadsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewDownloadsToolStripMenuItem.Click
+        If WebView2.CoreWebView2 IsNot Nothing Then
+            WebView2.CoreWebView2.OpenDefaultDownloadDialog()
+        Else
+            MessageBox.Show("WebView2 is not initialized.")
         End If
-
-        Await currentWebView.EnsureCoreWebView2Async()
-
-        If currentWebView.CoreWebView2 Is Nothing Then
-            MessageBox.Show("The current tab is still initializing. Please wait a moment and try again.")
-            Return
-        End If
-
-        currentWebView.CoreWebView2.OpenDefaultDownloadDialog()
     End Sub
 
     Private Sub AboutToolStripMenuItem_Click_1(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
@@ -460,44 +508,23 @@ Public Class Browser
     End Sub
 
     Private Async Sub DeleteCacheToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteCacheToolStripMenuItem.Click
-        Dim currentWebView = GetCurrentWebView()
-
-        If currentWebView Is Nothing Then
-            MessageBox.Show("There is no active tab available. Open a tab and try again.")
-            Return
-        End If
-
-        Await currentWebView.EnsureCoreWebView2Async()
-
-        If currentWebView.CoreWebView2 Is Nothing Then
-            MessageBox.Show("The current tab is still initializing. Please wait a moment and try again.")
-            Return
-        End If
+        Await WebView2.EnsureCoreWebView2Async()
 
         ' Clear cache and other browsing data
-        Await currentWebView.CoreWebView2.Profile.ClearBrowsingDataAsync()
+        Await WebView2.CoreWebView2.Profile.ClearBrowsingDataAsync()
         Console.WriteLine("WebView2 cache cleared.")
     End Sub
 
-    Private Async Sub DeveloperToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeveloperToolsToolStripMenuItem.Click
-        Dim currentWebView = GetCurrentWebView()
+    Private Sub DeveloperToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeveloperToolsToolStripMenuItem.Click
+        WebView2.CoreWebView2.OpenDevToolsWindow()
+    End Sub
 
-        If currentWebView Is Nothing Then
-            MessageBox.Show("There is no active tab available. Open a tab and try again.")
-            Return
-        End If
-
-        Await currentWebView.EnsureCoreWebView2Async()
-
-        If currentWebView.CoreWebView2 Is Nothing Then
-            MessageBox.Show("The current tab is still initializing. Please wait a moment and try again.")
-            Return
-        End If
-
-        currentWebView.CoreWebView2.OpenDevToolsWindow()
+    Public Sub ClearHistoryData()
+        historyList.Clear()
+        BrowserHistoryManager.ClearHistory()
     End Sub
 
     Private Sub ClearHistoryToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClearHistoryToolStripMenuItem1.Click
-        BrowserHistoryManager.ClearHistory()
+        ClearHistoryData()
     End Sub
 End Class
