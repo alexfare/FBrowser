@@ -4,9 +4,6 @@
     <_LastSelectedProfileId>D:\Visual Studio\FBrowser\My Project\PublishProfiles\ClickOnceProfile1.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="!Deleted\BookmarkForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="About.vb">
       <SubType>Form</SubType>
     </Compile>
