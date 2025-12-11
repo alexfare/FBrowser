@@ -3,6 +3,10 @@ Settings Page
 Cache Info
 Display Favicon
 
+v1.3.9.16
+Update WebView - v1.0.3650.58
+Update Startup settings.
+
 v1.3.8.15
 Added Bookmarks menu and functionality.
 Fixed Clearing History.
