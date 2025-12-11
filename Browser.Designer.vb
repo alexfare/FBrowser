@@ -169,7 +169,7 @@ Partial Class Browser
         ' NewTabToolStripMenuItem
         ' 
         NewTabToolStripMenuItem.Name = "NewTabToolStripMenuItem"
-        NewTabToolStripMenuItem.Size = New Size(65, 20)
+        NewTabToolStripMenuItem.Size = New Size(64, 20)
         NewTabToolStripMenuItem.Text = "New Tab"
         ' 
         ' HistoryToolStripMenuItem
@@ -189,13 +189,13 @@ Partial Class Browser
         ' ViewHistoryToolStripMenuItem1
         ' 
         ViewHistoryToolStripMenuItem1.Name = "ViewHistoryToolStripMenuItem1"
-        ViewHistoryToolStripMenuItem1.Size = New Size(180, 22)
+        ViewHistoryToolStripMenuItem1.Size = New Size(142, 22)
         ViewHistoryToolStripMenuItem1.Text = "View History"
         ' 
         ' ClearHistoryToolStripMenuItem1
         ' 
         ClearHistoryToolStripMenuItem1.Name = "ClearHistoryToolStripMenuItem1"
-        ClearHistoryToolStripMenuItem1.Size = New Size(180, 22)
+        ClearHistoryToolStripMenuItem1.Size = New Size(142, 22)
         ClearHistoryToolStripMenuItem1.Text = "Clear History"
         ' 
         ' BookmarkToolStripMenuItem
@@ -272,7 +272,9 @@ Partial Class Browser
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MainMenuStrip = MenuStrip1
         Name = "Browser"
+        StartPosition = FormStartPosition.CenterScreen
         Text = "FBrowser"
+        WindowState = FormWindowState.Maximized
         TabControl1.ResumeLayout(False)
         TabPage1.ResumeLayout(False)
         FlowLayoutPanel1.ResumeLayout(False)
