@@ -7,6 +7,9 @@
     <Compile Update="About.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="BookmarkForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Browser.vb">
       <SubType>Form</SubType>
     </Compile>
