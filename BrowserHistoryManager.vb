@@ -10,7 +10,7 @@ Public Class BrowserHistoryManager
 
     Private Shared Sub EnsureDirectoryAndFileExist()
         Dim folderPath As String = Path.GetDirectoryName(historyFilePath)
-        If Not Directory.Exists(folderPath) Then
+        If String.IsNullOrEmpty(folderPath) OrElse Not Directory.Exists(folderPath) Then
             Directory.CreateDirectory(folderPath)
         End If
 
