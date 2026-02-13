@@ -150,11 +150,13 @@ Public Class BookmarkManager
 
     Private Shared Sub EnsureDirectoryAndFileExist()
         Dim folderPath As String = Path.GetDirectoryName(bookmarkFilePath)
-        If String.IsNullOrEmpty(folderPath) OrElse Not Directory.Exists(folderPath) Then
+        ' Only attempt to create the directory when we have a valid folder path
+        If Not String.IsNullOrEmpty(folderPath) AndAlso Not Directory.Exists(folderPath) Then
             Directory.CreateDirectory(folderPath)
         End If
 
-        If Not File.Exists(bookmarkFilePath) Then
+        ' Guard against empty bookmarkFilePath before creating the file
+        If Not String.IsNullOrEmpty(bookmarkFilePath) AndAlso Not File.Exists(bookmarkFilePath) Then
             Using File.Create(bookmarkFilePath)
             End Using
         End If
